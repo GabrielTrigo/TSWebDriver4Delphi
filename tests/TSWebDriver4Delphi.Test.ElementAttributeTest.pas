@@ -3,18 +3,18 @@ unit TSWebDriver4Delphi.Test.ElementAttributeTest;
 interface
 
 uses
-  DUnitX.TestFramework, TSWebDriver4Delphi.Test.Utils, TSWebDriver.Interfaces,
-  TSWebDriver, TSWebDriver.IElement, System.SysUtils, TSWebDriver.By,
-  TSWebDriver.Utils, TSWebDriver.IBrowser;
+  DUnitX.TestFramework, TSWebDriver4Delphi.Test.Utils,
+  TSWebDriver.IElement, TSWebDriver.By, TSWebDriver.Utils,
+  TSWebDriver4Delphi.Test.Base;
 
 type
   [TestFixture]
-  TElementAttributeTest = class
+  TElementAttributeTest = class(TBaseTest)
   private
     By: TSBy;
-    FDriver: ITSWebDriverBase;
-    FChromeDriver: ITSWebDriverBrowser;
   public
+    constructor Create(); override;
+    destructor Destroy(); override;
     [Setup]
     procedure Setup;
     [TearDown]
@@ -47,29 +47,30 @@ type
     procedure ShouldReturnTheValueOfCheckedForACheckboxOnlyIfItIsChecked;
   end;
 
-const
-  USER_DATA_DIR_ARG = '--user-data-dir=E:\\Dev\\WebDrivers\\cache';
-
 implementation
+
+uses
+  System.SysUtils;
+
+constructor TElementAttributeTest.Create;
+begin
+  inherited;
+end;
+
+destructor TElementAttributeTest.Destroy;
+begin
+  inherited;
+end;
 
 procedure TElementAttributeTest.Setup;
 begin
-  FDriver := TTSWebDriver.New.Driver;
-  FDriver
-    .Options
-      .DriverPath('E:\Dev\WebDrivers\chromedriver.exe')
-    .&End;
-
-  FChromeDriver := FDriver.Browser().Chrome();
-  FChromeDriver.AddArgument(USER_DATA_DIR_ARG);
-
-  FChromeDriver.NewSession();
+  ChromeDriver.NewSession();
 end;
 
 procedure TElementAttributeTest.TearDown;
 begin
-  FChromeDriver.CloseSection();
-  FDriver.Stop();
+  if Driver.IsRunning and (ChromeDriver.SessionID <> EmptyStr) then
+    ChromeDriver.CloseSection();
 end;
 
 /// <summary>
@@ -80,10 +81,10 @@ var
   lhead: ITSWebDriverElement;
   lattribute: string;
 begin
-  FChromeDriver.NavigateTo(MakeUrlFile('simpleTest.html'));
-  FChromeDriver.WaitForPageReady();
+  ChromeDriver.NavigateTo(MakeUrlFile('simpleTest.html'));
+  ChromeDriver.WaitForPageReady();
 
-  lhead := FChromeDriver.FindElement(By.Xpath('/html'));
+  lhead := ChromeDriver.FindElement(By.Xpath('/html'));
   lattribute := lhead.GetAttribute('cheese');
 
   Assert.AreEqual('null', lattribute);
@@ -97,10 +98,10 @@ var
   limg: ITSWebDriverElement;
   lattribute: string;
 begin
-  FChromeDriver.NavigateTo(MakeUrlFile('simpleTest.html'));
-  FChromeDriver.WaitForPageReady();
+  ChromeDriver.NavigateTo(MakeUrlFile('simpleTest.html'));
+  ChromeDriver.WaitForPageReady();
 
-  limg := FChromeDriver.FindElement(By.Id('invalidImgTag'));
+  limg := ChromeDriver.FindElement(By.Id('invalidImgTag'));
   lattribute := limg.GetAttribute('src');
 
   Assert.AreEqual('null', lattribute);
@@ -114,10 +115,10 @@ var
   limg: ITSWebDriverElement;
   lattribute: string;
 begin
-  FChromeDriver.NavigateTo(MakeUrlFile('simpleTest.html'));
-  FChromeDriver.WaitForPageReady();
+  ChromeDriver.NavigateTo(MakeUrlFile('simpleTest.html'));
+  ChromeDriver.WaitForPageReady();
 
-  limg := FChromeDriver.FindElement(By.Id('validImgTag'));
+  limg := ChromeDriver.FindElement(By.Id('validImgTag'));
   lattribute := limg.GetAttribute('src');
 
   Assert.Contains(MakeUrlFile('icon.gif'), lattribute);
@@ -131,10 +132,10 @@ var
   limg: ITSWebDriverElement;
   lattribute: string;
 begin
-  FChromeDriver.NavigateTo(MakeUrlFile('simpleTest.html'));
-  FChromeDriver.WaitForPageReady();
+  ChromeDriver.NavigateTo(MakeUrlFile('simpleTest.html'));
+  ChromeDriver.WaitForPageReady();
 
-  limg := FChromeDriver.FindElement(By.Id('validAnchorTag'));
+  limg := ChromeDriver.FindElement(By.Id('validAnchorTag'));
   lattribute := limg.GetAttribute('href');
 
   Assert.Contains(MakeUrlFile('icon.gif'), lattribute);
@@ -147,10 +148,10 @@ procedure TElementAttributeTest.ShouldReturnEmptyAttributeValuesWhenPresentAndTh
 var
   lbody: ITSWebDriverElement;
 begin
-  FChromeDriver.NavigateTo(MakeUrlFile('simpleTest.html'));
-  FChromeDriver.WaitForPageReady();
+  ChromeDriver.NavigateTo(MakeUrlFile('simpleTest.html'));
+  ChromeDriver.WaitForPageReady();
 
-  lbody := FChromeDriver.FindElement(By.XPath('//body'));
+  lbody := ChromeDriver.FindElement(By.XPath('//body'));
 
   Assert.IsEmpty(lbody.GetAttribute('style'));
 end;
@@ -163,15 +164,15 @@ var
   linputElement: ITSWebDriverElement;
   lPElement: ITSWebDriverElement;
 begin
-  FChromeDriver.NavigateTo(MakeUrlFile('formPage.html'));
-  FChromeDriver.WaitForPageReady();
+  ChromeDriver.NavigateTo(MakeUrlFile('formPage.html'));
+  ChromeDriver.WaitForPageReady();
 
-  linputElement := FChromeDriver.FindElement(By.XPath('//input[@id=''working'']'));
+  linputElement := ChromeDriver.FindElement(By.XPath('//input[@id=''working'']'));
 
   Assert.AreEqual('null', linputElement.GetAttribute('disabled'));
   Assert.IsTrue(linputElement.GetEnabled(), 'Element is not enabled');
 
-  lPElement := FChromeDriver.FindElement(By.Id('peas'));
+  lPElement := ChromeDriver.FindElement(By.Id('peas'));
 
   Assert.AreEqual('null', lPElement.GetAttribute('disabled'));
   Assert.IsTrue(lPElement.GetEnabled(), 'Element is not enabled');
@@ -181,8 +182,22 @@ end;
 /// Deve retornar o valor do atributo do índice mesmo que esteja faltando
 /// </summary>
 procedure TElementAttributeTest.ShouldReturnTheValueOfTheIndexAttrbuteEvenIfItIsMissing;
+var
+  lMultiSelect: ITSWebDriverElement;
+  lOptions: TTSWebDriverElementList;
 begin
+  try
+    ChromeDriver.NavigateTo(MakeUrlFile('formPage.html'));
+    ChromeDriver.WaitForPageReady();
 
+    lMultiSelect := ChromeDriver.FindElement(By.Id('multi'));
+    lOptions := lMultiSelect.FindElements(By.TagName('option'));
+    
+    Assert.AreEqual('1', lOptions[1].GetAttribute('index'));
+  finally
+    if Assigned(lOptions) then
+      FreeAndNil(lOptions);
+  end;
 end;
 
 /// <summary>
@@ -192,13 +207,13 @@ procedure TElementAttributeTest.ShouldIndicateTheElementsThatAreDisabledAreNotEn
 var
   linputElement: ITSWebDriverElement;
 begin
-  FChromeDriver.NavigateTo(MakeUrlFile('formPage.html'));
-  FChromeDriver.WaitForPageReady();
+  ChromeDriver.NavigateTo(MakeUrlFile('formPage.html'));
+  ChromeDriver.WaitForPageReady();
 
-  linputElement := FChromeDriver.FindElement(By.XPath('//input[@id=''notWorking'']'));
+  linputElement := ChromeDriver.FindElement(By.XPath('//input[@id=''notWorking'']'));
   Assert.IsFalse(linputElement.GetEnabled(), 'Element should be disabled');
 
-  linputElement := FChromeDriver.FindElement(By.XPath('//input[@id=''working'']'));
+  linputElement := ChromeDriver.FindElement(By.XPath('//input[@id=''working'']'));
   Assert.IsTrue(linputElement.GetEnabled(), 'Element should be enabled');
 end;
 
@@ -212,16 +227,16 @@ var
   lDisabledTextElement3: ITSWebDriverElement;
   lattribute: string;
 begin
-  FChromeDriver.NavigateTo(MakeUrlFile('formPage.html'));
-  FChromeDriver.WaitForPageReady();
+  ChromeDriver.NavigateTo(MakeUrlFile('formPage.html'));
+  ChromeDriver.WaitForPageReady();
 
-  lDisabledTextElement1 := FChromeDriver.FindElement(By.Id('disabledTextElement1'));
+  lDisabledTextElement1 := ChromeDriver.FindElement(By.Id('disabledTextElement1'));
   Assert.IsFalse(lDisabledTextElement1.GetEnabled(), 'disabledTextElement1 should be disabled');
 
-  lDisabledTextElement2 := FChromeDriver.FindElement(By.Id('disabledTextElement2'));
+  lDisabledTextElement2 := ChromeDriver.FindElement(By.Id('disabledTextElement2'));
   Assert.IsFalse(lDisabledTextElement2.GetEnabled(), 'disabledTextElement2 should be disabled');
 
-  lDisabledTextElement3 := FChromeDriver.FindElement(By.Id('disabledSubmitElement'));
+  lDisabledTextElement3 := ChromeDriver.FindElement(By.Id('disabledSubmitElement'));
   Assert.IsFalse(lDisabledTextElement3.GetEnabled(), 'disabledSubmitElement should be disabled');
 end;
 
@@ -233,10 +248,10 @@ var
   ldisabledTextElement1: ITSWebDriverElement;
   ldisabledTextElement2: ITSWebDriverElement;
 begin
-  FChromeDriver.NavigateTo(MakeUrlFile('formPage.html'));
-  FChromeDriver.WaitForPageReady();
+  ChromeDriver.NavigateTo(MakeUrlFile('formPage.html'));
+  ChromeDriver.WaitForPageReady();
 
-  ldisabledTextElement1 := FChromeDriver.FindElement(By.Id('disabledTextElement1'));
+  ldisabledTextElement1 := ChromeDriver.FindElement(By.Id('disabledTextElement1'));
 
   try
     ldisabledTextElement1.SendKeys('foo');
@@ -247,7 +262,7 @@ begin
 
   Assert.AreEqual(EmptyStr, ldisabledTextElement1.GetText());
 
-  ldisabledTextElement2 := FChromeDriver.FindElement(By.Id('disabledTextElement2'));
+  ldisabledTextElement2 := ChromeDriver.FindElement(By.Id('disabledTextElement2'));
 
   try
     ldisabledTextElement2.SendKeys('bar');
@@ -266,10 +281,10 @@ procedure TElementAttributeTest.ShouldIndicateWhenATextAreaIsDisabled;
 var
   ltextArea: ITSWebDriverElement;
 begin
-  FChromeDriver.NavigateTo(MakeUrlFile('formPage.html'));
-  FChromeDriver.WaitForPageReady();
+  ChromeDriver.NavigateTo(MakeUrlFile('formPage.html'));
+  ChromeDriver.WaitForPageReady();
 
-  ltextArea := FChromeDriver.FindElement(By.XPath('//textarea[@id=''notWorkingArea'']'));
+  ltextArea := ChromeDriver.FindElement(By.XPath('//textarea[@id=''notWorkingArea'']'));
   
   Assert.IsFalse(ltextArea.GetEnabled());
 end;
@@ -282,11 +297,11 @@ var
   lEnabled: ITSWebDriverElement;
   lDisabled: ITSWebDriverElement;
 begin
-  FChromeDriver.NavigateTo(MakeUrlFile('formPage.html'));
-  FChromeDriver.WaitForPageReady();
+  ChromeDriver.NavigateTo(MakeUrlFile('formPage.html'));
+  ChromeDriver.WaitForPageReady();
 
-  lEnabled := FChromeDriver.FindElement(By.Name('selectomatic'));
-  lDisabled := FChromeDriver.FindElement(By.Name('no-select'));
+  lEnabled := ChromeDriver.FindElement(By.Name('selectomatic'));
+  lDisabled := ChromeDriver.FindElement(By.Name('no-select'));
 
   Assert.IsTrue(lEnabled.GetEnabled(), 'Expected select element to be enabled');
   Assert.IsFalse(lDisabled.GetEnabled(), 'Expected select element to be disabled');
@@ -299,10 +314,10 @@ procedure TElementAttributeTest.ShouldReturnTheValueOfCheckedForACheckboxOnlyIfI
 var
   lCheckbox: ITSWebDriverElement;
 begin
-  FChromeDriver.NavigateTo(MakeUrlFile('formPage.html'));
-  FChromeDriver.WaitForPageReady();
+  ChromeDriver.NavigateTo(MakeUrlFile('formPage.html'));
+  ChromeDriver.WaitForPageReady();
 
-  lCheckbox := FChromeDriver.FindElement(By.XPath('//input[@id=''checky'']'));
+  lCheckbox := ChromeDriver.FindElement(By.XPath('//input[@id=''checky'']'));
 
   // Verifique se o atributo "checked" é nulo (null) inicialmente
   Assert.AreEqual('null', lCheckbox.GetAttribute('checked'));

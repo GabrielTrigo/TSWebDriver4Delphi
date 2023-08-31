@@ -12,7 +12,6 @@ uses
   TestInsight.DUnitX,
   {$ELSE}
   DUnitX.Loggers.Console,
-  DUnitX.Loggers.Xml.NUnit,
   {$ENDIF }
   DUnitX.TestFramework,
   TSWebDriver4Delphi.Test.CssValue in 'TSWebDriver4Delphi.Test.CssValue.pas',
@@ -31,7 +30,8 @@ uses
   TSWebDriver4Delphi.Test.ElementAttributeTest in 'TSWebDriver4Delphi.Test.ElementAttributeTest.pas',
   TSWebDriver.By in '..\src\TSWebDriver.By.pas',
   TSWebDriver.Browser in '..\src\TSWebDriver.Browser.pas',
-  TSWebDriver.IBrowser in '..\src\TSWebDriver.IBrowser.pas';
+  TSWebDriver.IBrowser in '..\src\TSWebDriver.IBrowser.pas',
+  TSWebDriver4Delphi.Test.Base in 'TSWebDriver4Delphi.Test.Base.pas';
 
 {$IFNDEF TESTINSIGHT}
 var

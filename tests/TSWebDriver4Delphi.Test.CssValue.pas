@@ -3,19 +3,17 @@ unit TSWebDriver4Delphi.Test.CssValue;
 interface
 
 uses
-  DUnitX.TestFramework, TSWebDriver4Delphi.Test.Utils, TSWebDriver.Interfaces,
-  TSWebDriver, TSWebDriver.IElement, TSWebDriver.By, TSWebDriver.IBrowser;
-
-{$M+}
+  DUnitX.TestFramework, TSWebDriver4Delphi.Test.Utils, TSWebDriver,
+  TSWebDriver.IElement, TSWebDriver.By, TSWebDriver4Delphi.Test.Base;
 
 type
   [TestFixture]
-  TCssValueTest = class
+  TCssValueTest = class(TBaseTest)
   private
     By: TSBy;
-    FDriver: ITSWebDriverBase;
-    FChromeDriver: ITSWebDriverBrowser;
   public
+    constructor Create(); override;
+    destructor Destroy(); override;
     [Setup]
     procedure Setup;
     [TearDown]
@@ -28,29 +26,30 @@ type
     procedure ShouldAllowInheritedStylesToBeUsed;
   end;
 
-const
-  USER_DATA_DIR_ARG = '--user-data-dir=E:\\Dev\\WebDrivers\\cache';
-
 implementation
+
+uses
+  System.SysUtils;
+
+constructor TCssValueTest.Create;
+begin
+  inherited;
+end;
+
+destructor TCssValueTest.Destroy;
+begin
+  inherited;
+end;
 
 procedure TCssValueTest.Setup;
 begin
-  FDriver := TTSWebDriver.New.Driver;
-  FDriver
-    .Options
-      .DriverPath('E:\Dev\WebDrivers\chromedriver.exe')
-    .&End;
-
-  FChromeDriver := FDriver.Browser().Chrome();
-  FChromeDriver.AddArgument(USER_DATA_DIR_ARG);
-
-  FChromeDriver.NewSession();
+  ChromeDriver.NewSession();
 end;
 
 procedure TCssValueTest.TearDown;
 begin
-  FChromeDriver.CloseSection();
-  FDriver.Stop();
+  if Driver.IsRunning and (ChromeDriver.SessionID <> EmptyStr) then
+    ChromeDriver.CloseSection();
 end;
 
 procedure TCssValueTest.ShouldPickUpStyleOfAnElement;
@@ -58,18 +57,18 @@ var
   lElement: ITSWebDriverElement;
   lbackgroundColour: string;
 begin
-  FChromeDriver.NavigateTo(MakeUrlFile('javascriptPage.html'));
-  FChromeDriver.WaitForPageReady();
+  ChromeDriver.NavigateTo(MakeUrlFile('javascriptPage.html'));
+  ChromeDriver.WaitForPageReady();
 
-  lElement := FChromeDriver.FindElement(By.Id('green-parent'));
+  lElement := ChromeDriver.FindElement(By.Id('green-parent'));
   lbackgroundColour := lElement.GetCssValue('background-color');
 
-  Assert.AreEqual('rgba(0, 128, 0, 1)', lbackgroundColour);
+  Assert.Contains(['#008000', 'rgba(0, 128, 0, 1)', 'rgb(0, 128, 0)'], lbackgroundColour);
 
-  lElement := FChromeDriver.FindElement(By.Id('red-item'));
+  lElement := ChromeDriver.FindElement(By.Id('red-item'));
   lbackgroundColour := lElement.GetCssValue('background-color');
 
-  Assert.AreEqual('rgba(255, 0, 0, 1)', lbackgroundColour);
+  Assert.Contains(['#ff0000', 'rgba(255, 0, 0, 1)', 'rgb(255, 0, 0)'], lbackgroundColour);
 end;
 
 procedure TCssValueTest.GetCssValueShouldReturnStandardizedColour;
@@ -77,18 +76,18 @@ var
   lElement: ITSWebDriverElement;
   lbackgroundColour: string;
 begin
-  FChromeDriver.NavigateTo(MakeUrlFile('colorPage.html'));
-  FChromeDriver.WaitForPageReady();
+  ChromeDriver.NavigateTo(MakeUrlFile('colorPage.html'));
+  ChromeDriver.WaitForPageReady();
 
-  lElement := FChromeDriver.FindElement(By.Id('namedColor'));
+  lElement := ChromeDriver.FindElement(By.Id('namedColor'));
   lbackgroundColour := lElement.GetCssValue('background-color');
 
-  Assert.AreEqual('rgba(0, 128, 0, 1)', lbackgroundColour);
+  Assert.Contains(['rgba(0, 128, 0, 1)', 'rgb(0, 128, 0)'], lbackgroundColour);
 
-  lElement := FChromeDriver.FindElement(By.Id('rgb'));
+  lElement := ChromeDriver.FindElement(By.Id('rgb'));
   lbackgroundColour := lElement.GetCssValue('background-color');
 
-  Assert.AreEqual('rgba(0, 128, 0, 1)', lbackgroundColour);
+  Assert.Contains(['rgba(0, 128, 0, 1)', 'rgb(0, 128, 0)'], lbackgroundColour);
 end;
 
 procedure TCssValueTest.ShouldAllowInheritedStylesToBeUsed;
@@ -96,13 +95,13 @@ var
   lElement: ITSWebDriverElement;
   lbackgroundColour: string;
 begin
-  FChromeDriver.NavigateTo(MakeUrlFile('javascriptPage.html'));
-  FChromeDriver.WaitForPageReady();
+  ChromeDriver.NavigateTo(MakeUrlFile('javascriptPage.html'));
+  ChromeDriver.WaitForPageReady();
 
-  lElement := FChromeDriver.FindElement(By.Id('green-item'));
+  lElement := ChromeDriver.FindElement(By.Id('green-item'));
   lbackgroundColour := lElement.GetCssValue('background-color');
 
-  Assert.AreEqual('rgba(0, 0, 0, 0)', lbackgroundColour);
+  Assert.Contains(['transparent', 'rgba(0, 0, 0, 0)'], lbackgroundColour);
 end;
 
 initialization

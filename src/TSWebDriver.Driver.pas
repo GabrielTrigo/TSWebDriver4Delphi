@@ -74,8 +74,6 @@ function TTSWebDriverBase.Start(): ITSWebDriverBase;
 begin
   FProccessName := ExtractFileName(FSWebDriverBaseOptions.DriverPath);
 
-  if Self.IsRunning then Exit;
-
   if not FileExists(FSWebDriverBaseOptions.DriverPath) then
     raise Exception.Create('driver file not exists.' +
       FSWebDriverBaseOptions.DriverPath);
@@ -96,8 +94,6 @@ end;
 
 function TTSWebDriverBase.Stop(): ITSWebDriverBase;
 begin
-  if not Self.IsRunning then Exit;
-
   TerminateProcess(FProcessInfo.hProcess, 0);
   FillChar(FStartupInfo, SizeOf(FStartupInfo), 0);
   FillChar(FProcessInfo, SizeOf(FProcessInfo), 0);
