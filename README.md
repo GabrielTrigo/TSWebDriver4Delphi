@@ -5,6 +5,13 @@ This library was inspired by [Selenium](https://github.com/SeleniumHQ/selenium)
 
 TSWebDriver4Delphi is a comprehensive project that encapsulates a variety of tools that enable web browser automation. Specifically provides an infrastructure for the W3C WebDriver specification - a platform and language-neutral coding interface compatible with the Chrome browser (for now, only Chrome).
 
+Demo
+--
+Login and E-commerce scraping
+
+![ezgif com-video-to-gif (1)](https://github.com/GabrielTrigo/TSWebDriver4Delphi/assets/43503837/258db248-915c-451a-ad39-5d62c05db11c)
+
+
 What is WebDriver? 
 --
 _WebDriver is a remote control interface that enables introspection and control of user agents. It provides a platform- and language-neutral wire protocol as a way for out-of-process programs to remotely instruct the behavior of web browsers._
