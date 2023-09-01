@@ -39,7 +39,7 @@ Search automation
 - Browser
   - Execute
   - NewSession
-  - CloseSection
+  - CloseSession
   - NavigateTo
   - ExecuteSyncScript
   - ExecuteAsyncScript
