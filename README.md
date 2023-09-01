@@ -8,8 +8,7 @@ TSWebDriver4Delphi is a comprehensive project that encapsulates a variety of too
 Demo
 --
 Login and E-commerce scraping
-
-![ezgif com-video-to-gif (1)](https://github.com/GabrielTrigo/TSWebDriver4Delphi/assets/43503837/258db248-915c-451a-ad39-5d62c05db11c)
+![ezgif com-video-to-gif (2)](https://github.com/GabrielTrigo/TSWebDriver4Delphi/assets/43503837/912ca229-ad64-4fb5-b33c-6cdb3af65d5f)
 
 
 What is WebDriver? 
@@ -19,22 +18,67 @@ _WebDriver is a remote control interface that enables introspection and control 
 _Provided is a set of interfaces to discover and manipulate DOM elements in web documents and to control the behavior of a user agent. It is primarily intended to allow web authors to write tests that automate a user agent from a separate controlling process, but may also be used in such a way as to allow in-browser scripts to control a — possibly separate — browser._
 
 ## Example
-Login automation
+Search automation
 ```delphi
   FChromeDriver.NavigateTo('https://letcode.in/elements');
   FChromeDriver.WaitForPageReady();
 
-  FChromeDriver.FindElement(FBy.Name('username')).SendKeys('GabrielTrigo');
+  lElement := FChromeDriver.FindElement(FBy.ClassName('search-box__input'));
 
-  FChromeDriver.FindElement(FBy.ID('search')).Click();
+  lElement.SendKeys('automate');
 
-  FChromeDriver.WaitForSelector('.media');
+  FChromeDriver.WaitForSelector('.search-box__link');
 
-  with FChromeDriver.FindElement(FBy.CssSelector('.media-content > span')) do
-  begin
-    Memo1.Lines.AddPair('GitHub bio', GetText());
-  end;
+  lElement := FChromeDriver.FindElement(FBy.ClassName('search-box__link'));
+
+  lElement.Click();
 ```
+
+## Features
+
+- Browser
+  - Execute
+  - NewSession
+  - CloseSession
+  - NavigateTo
+  - ExecuteSyncScript
+  - ExecuteAsyncScript
+  - SessionID (sobrecarga)
+  - FindElement
+  - FindElements
+  - TakeScreenshot
+  - Status
+  - AddArgument
+  - WaitForSelector
+  - GetPageSource
+  - WaitForPageReady
+  - Refresh
+  - Forward
+  - Back
+  - PrintPage
+  - GetTitle
+  - GetCurrentUrl
+- Element
+  - Cross
+  - GetTagName
+  - GetText
+  - GetEnabled
+  - GetSelected
+  - GetLocation
+  - GetSize
+  - GetDisplayed
+  - Clear
+  - SendKeys
+  - Submit
+  - Click
+  - GetAttribute
+  - GetProperty
+  - GetDomAttribute
+  - GetCssValue
+  - LoadFromJson
+  - IsEmpty
+  - FindElement(in current element)
+  - FindElements(in current element)
 
 ## Supporting documents
 
