@@ -25,6 +25,7 @@ type
     ['{A5972545-D66E-4311-A79F-5D756791057F}']
     function DriverPath(AValue: String): ITSWebDriverBaseOptions; overload;
     function DriverPath(): String; overload;
+    function AddArgument(AValue: String): ITSWebDriverBaseOptions;
     function &End(): ITSWebDriverBase;
   end;
 

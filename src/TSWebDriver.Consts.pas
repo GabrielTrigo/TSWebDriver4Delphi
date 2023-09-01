@@ -34,7 +34,6 @@ const
             '"--allow-pre-commit-input",' +
             '"--disable-background-networking",' +
             '"--disable-background-timer-throttling",' +
-            '"--start-maximized",' +
             '"--disable-backgrounding-occluded-windows",' +
             '"--disable-breakpad",' +
             '"--disable-client-side-phishing-detection",' +
@@ -59,8 +58,7 @@ const
             '"--no-first-run",' +
             '"--password-store=basic",' +
             '"--use-mock-keychain",' +
-            '"--remote-debugging-port=0",' +
-            '"about:blank"' +
+            '"--remote-debugging-port=0"' +
             '@extra_args' +
             ']' +
           '}' +
@@ -140,9 +138,6 @@ begin
   CommandMap.Add(GET_ELEMENT_TEXT, '/session/:sessionId/element/:id/text');
   CommandMap.Add(GET_ELEMENT_TAG_NAME, '/session/:sessionId/element/:id/name');
   CommandMap.Add(IS_ELEMENT_ENABLED, '/session/:sessionId/element/:id/enabled');
-
-  // ... (continue mapeando os comandos)
-
 end;
 
 initialization

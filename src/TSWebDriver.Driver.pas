@@ -18,6 +18,7 @@ type
     constructor Create(ATSWebDriverBase: ITSWebDriverBase);
     destructor Destroy(); override;
     function DriverPath(AValue: String): ITSWebDriverBaseOptions; overload;
+    function AddArgument(AValue: String): ITSWebDriverBaseOptions;
     function DriverPath(): String; overload;
   end;
 
@@ -25,7 +26,6 @@ type
   strict private
     FSWebDriverBaseOptions: ITSWebDriverBaseOptions;
     FProccessName: string;
-    FArgs: string;
     FStartupInfo: TStartupInfo;
     FProcessInfo: TProcessInformation;
   public
@@ -84,7 +84,7 @@ begin
   FStartupInfo.wShowWindow := SW_NORMAL;
   FStartupInfo.dwFlags := STARTF_USESHOWWINDOW;
 
-  if CreateProcess(nil, Pchar(FSWebDriverBaseOptions.DriverPath + ' ' + FArgs), nil, nil, False,
+  if CreateProcess(nil, Pchar(FSWebDriverBaseOptions.DriverPath + ' '), nil, nil, False,
     NORMAL_PRIORITY_CLASS, nil, nil, FStartupInfo, FProcessInfo) then
   begin end;
 end;
@@ -106,6 +106,13 @@ end;
 class function TTSWebDriverBaseOptions.New(ATSWebDriverBase: ITSWebDriverBase): ITSWebDriverBaseOptions;
 begin
   Result := Self.Create(ATSWebDriverBase);
+end;
+
+function TTSWebDriverBaseOptions.AddArgument(
+  AValue: String): ITSWebDriverBaseOptions;
+begin
+  /// not implemented \\\
+  Result := Self;
 end;
 
 constructor TTSWebDriverBaseOptions.Create(ATSWebDriverBase: ITSWebDriverBase);

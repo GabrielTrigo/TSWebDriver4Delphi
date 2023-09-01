@@ -1,4 +1,4 @@
-object Form1: TForm1
+object FrmMain: TFrmMain
   Left = 0
   Top = 0
   ClientHeight = 351
@@ -31,8 +31,8 @@ object Form1: TForm1
     ParentFont = False
     ScrollBars = ssVertical
     TabOrder = 0
-    ExplicitTop = 136
-    ExplicitWidth = 688
+    ExplicitTop = 65
+    ExplicitWidth = 512
   end
   object btnNavigateTo: TButton
     Left = 8
@@ -96,5 +96,14 @@ object Form1: TForm1
     Caption = 'Example 3'
     TabOrder = 7
     OnClick = btnExample3Click
+  end
+  object Button1: TButton
+    Left = 424
+    Top = 24
+    Width = 75
+    Height = 25
+    Caption = 'Button1'
+    TabOrder = 8
+    OnClick = Button1Click
   end
 end

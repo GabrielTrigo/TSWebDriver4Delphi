@@ -103,7 +103,7 @@
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <DCCReference Include="uExampleTSWebDriver.pas">
-            <Form>Form1</Form>
+            <Form>FrmMain</Form>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\src\TSWebDriver.Browser.pas"/>

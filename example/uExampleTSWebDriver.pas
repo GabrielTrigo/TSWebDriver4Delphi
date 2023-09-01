@@ -10,7 +10,7 @@ uses
   Vcl.WinXCtrls, TSWebDriver.Interfaces, TSWebDriver.By, TSWebDriver.IBrowser;
 
 type
-  TForm1 = class(TForm)
+  TFrmMain = class(TForm)
     MemLog: TMemo;
     btnNavigateTo: TButton;
     btnExecuteScript: TButton;
@@ -19,26 +19,33 @@ type
     btnExample1: TButton;
     btnExample2: TButton;
     btnExample3: TButton;
+    Button1: TButton;
     procedure FormCreate(Sender: TObject);
     procedure btnExecuteScriptClick(Sender: TObject);
-    procedure btnTakeScreenshotClick(Sender: TObject);
     procedure btnExample4Click(Sender: TObject);
     procedure btnExample5Click(Sender: TObject);
-    procedure btnExample1Click(Sender: TObject);
     procedure btnExample2Click(Sender: TObject);
     procedure btnExample3Click(Sender: TObject);
     procedure btnNavigateToClick(Sender: TObject);
+    procedure btnExample1Click(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
     FDriver: ITSWebDriverBase;
     FChromeDriver: ITSWebDriverBrowser;
     FBy: TSBy;
+    procedure Run(AProc: Tproc; AUrl: string);
+    procedure ExampleLoginAndScrap;
+    procedure ExampleDynamicElement;
+    procedure ExampleGitHubBio;
+    procedure ExampleGitHubFollowers;
+    procedure ExampleChromeSearch;
   public
    { Public declarations }
   end;
 
 var
-  Form1: TForm1;
+  FrmMain: TFrmMain;
 
 const
   USER_DATA_DIR_ARG = '--user-data-dir=E:\\Dev\\Delphi\\TSWebDriver4Delphi\\example\\cache';
@@ -47,7 +54,7 @@ implementation
 
 {$R *.dfm}
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TFrmMain.FormCreate(Sender: TObject);
 begin
   ReportMemoryLeaksOnShutdown := True;
 
@@ -58,51 +65,105 @@ begin
     .&End;
 
   FChromeDriver := FDriver.Browser().Chrome();
-  FChromeDriver.AddArgument(USER_DATA_DIR_ARG);
+  FChromeDriver
+    //.AddArgument('--start-maximized')
+    .AddArgument('--window-size=1000,800')
+    .AddArgument(USER_DATA_DIR_ARG);
 
   FDriver.Start();
+end;
+
+procedure TFrmMain.Run(AProc: Tproc; AUrl: string);
+begin
+  MemLog.Clear();
+
   FChromeDriver.NewSession();
+
+  FChromeDriver.NavigateTo(AUrl);
+  FChromeDriver.WaitForPageReady();
+
+  AProc();
+
+  FChromeDriver.CloseSession();
 end;
 
-procedure TForm1.btnExample1Click(Sender: TObject);
-var
-  lElement: ITSWebDriverElement;
-  lElements: TTSWebDriverElementList;
+procedure TFrmMain.btnExample1Click(Sender: TObject);
 begin
-  MemLog.Clear();
-
-  FChromeDriver.NavigateTo('https://www.saucedemo.com');
-  FChromeDriver.WaitForPageReady();
-
-  FChromeDriver.FindElement(FBy.Name('user-name')).SendKeys('standard_user');
-  FChromeDriver.FindElement(FBy.ID('password')).SendKeys('secret_sauce');
-  FChromeDriver.FindElement(FBy.Name('login-button')).Click();
-
-  FChromeDriver.WaitForPageReady();
-
-  lElements := FChromeDriver.FindElements(FBy.ClassName('inventory_item'));
-
-  for lElement in lElements do
-    with MemLog.Lines do
-    begin
-      AddPair('Name', lElement.FindElement(FBy.ClassName('inventory_item_name')).GetText());
-      AddPair('Description', lElement.FindElement(FBy.ClassName('inventory_item_desc')).GetText());
-      AddPair('Price', lElement.FindElement(FBy.ClassName('inventory_item_price')).GetText());
-      Append('-------------------------');
-    end;
-
-  FreeAndNil(lElements);
+  Self.Run(
+    ExampleLoginAndScrap,
+    'https://www.saucedemo.com'
+  );
 end;
 
-procedure TForm1.btnExample2Click(Sender: TObject);
+procedure TFrmMain.btnExample2Click(Sender: TObject);
+begin
+  Self.Run(
+    ExampleDynamicElement,
+    'https://www.selenium.dev/selenium/web/dynamic.html'
+  );
+end;
+
+procedure TFrmMain.btnExample3Click(Sender: TObject);
+begin
+  Self.Run(
+    ExampleGitHubBio,
+    'https://letcode.in/elements'
+  );
+end;
+
+procedure TFrmMain.btnExample4Click(Sender: TObject);
+begin
+  Self.Run(
+    ExampleChromeSearch,
+    'https://developer.chrome.com'
+  );
+end;
+
+procedure TFrmMain.btnExample5Click(Sender: TObject);
+begin
+  Self.Run(
+    ExampleGitHubFollowers,
+    'https://gh-users-search.netlify.app'
+  );
+end;
+
+procedure TFrmMain.btnExecuteScriptClick(Sender: TObject);
+begin
+  MemLog.Text :=
+    FChromeDriver.ExecuteSyncScript(
+      InputBox('Script', '', 'return document.title'));
+end;
+
+procedure TFrmMain.btnNavigateToClick(Sender: TObject);
+begin
+  FChromeDriver.NavigateTo(
+    InputBox('Url', '', 'https://github.com/GabrielTrigo'));
+end;
+
+procedure TFrmMain.Button1Click(Sender: TObject);
+begin
+  ShowMessage(TFile.ReadAllText('test.txt'));
+end;
+
+procedure TFrmMain.ExampleChromeSearch;
 var
   lElement: ITSWebDriverElement;
 begin
-  MemLog.Clear();
+  lElement := FChromeDriver.FindElement(FBy.ClassName('search-box__input'));
 
-  FChromeDriver.NavigateTo('https://www.selenium.dev/selenium/web/dynamic.html');
-  FChromeDriver.WaitForPageReady();
+  lElement.SendKeys('automate');
 
+  FChromeDriver.WaitForSelector('.search-box__link');
+
+  lElement := FChromeDriver.FindElement(FBy.ClassName('search-box__link'));
+
+  lElement.Click();
+end;
+
+procedure TFrmMain.ExampleDynamicElement;
+var
+  lElement: ITSWebDriverElement;
+begin
   lElement := FChromeDriver.FindElement(FBy.Id('adder'));
 
   lElement.Click();
@@ -126,13 +187,8 @@ begin
   end;
 end;
 
-procedure TForm1.btnExample3Click(Sender: TObject);
+procedure TFrmMain.ExampleGitHubBio;
 begin
-  MemLog.Clear();
-
-  FChromeDriver.NavigateTo('https://letcode.in/elements');
-  FChromeDriver.WaitForPageReady();
-
   FChromeDriver.FindElement(FBy.Name('username')).SendKeys('GabrielTrigo');
 
   FChromeDriver.FindElement(FBy.ID('search')).Click();
@@ -145,36 +201,11 @@ begin
   end;
 end;
 
-procedure TForm1.btnExample4Click(Sender: TObject);
-var
-  lElement: ITSWebDriverElement;
-begin
-  MemLog.Clear();
-
-  FChromeDriver.NavigateTo('https://developer.chrome.com');
-  FChromeDriver.WaitForPageReady();
-
-  lElement := FChromeDriver.FindElement(FBy.ClassName('search-box__input'));
-
-  lElement.SendKeys('automate');
-
-  FChromeDriver.WaitForSelector('.search-box__link');
-
-  lElement := FChromeDriver.FindElement(FBy.ClassName('search-box__link'));
-
-  lElement.Click();
-end;
-
-procedure TForm1.btnExample5Click(Sender: TObject);
+procedure TFrmMain.ExampleGitHubFollowers;
 var
   lElement: ITSWebDriverElement;
   lElements: TTSWebDriverElementList;
 begin
-  MemLog.Clear();
-
-  FChromeDriver.NavigateTo('https://gh-users-search.netlify.app');
-  FChromeDriver.WaitForPageReady();
-
   lElements := FChromeDriver.FindElements(FBy.CssSelector('.followers > article'));
 
   for lElement in lElements do
@@ -188,22 +219,29 @@ begin
   FreeAndNil(lElements);
 end;
 
-procedure TForm1.btnExecuteScriptClick(Sender: TObject);
+procedure TFrmMain.ExampleLoginAndScrap;
+var
+  lElement: ITSWebDriverElement;
+  lElements: TTSWebDriverElementList;
 begin
-  MemLog.Text :=
-    FChromeDriver.ExecuteSyncScript(
-      InputBox('Script', '', 'return document.title'));
-end;
+  try
+    FChromeDriver.FindElement(FBy.Name('user-name')).SendKeys('standard_user');
+    FChromeDriver.FindElement(FBy.ID('password')).SendKeys('secret_sauce');
+    FChromeDriver.FindElement(FBy.Name('login-button')).Click();
 
-procedure TForm1.btnNavigateToClick(Sender: TObject);
-begin
-  FChromeDriver.NavigateTo(
-    InputBox('Url', '', 'https://github.com/GabrielTrigo'));
-end;
+    lElements := FChromeDriver.FindElements(FBy.ClassName('inventory_item'));
 
-procedure TForm1.btnTakeScreenshotClick(Sender: TObject);
-begin
-  MemLog.Text := FChromeDriver.TakeScreenshot();
+    for lElement in lElements do
+      with MemLog.Lines do
+      begin
+        AddPair('Name', lElement.FindElement(FBy.ClassName('inventory_item_name')).GetText());
+        AddPair('Description', lElement.FindElement(FBy.ClassName('inventory_item_desc')).GetText());
+        AddPair('Price', lElement.FindElement(FBy.ClassName('inventory_item_price')).GetText());
+        Append('-------------------------');
+      end;
+  finally
+    FreeAndNil(lElements);
+  end;
 end;
 
 end.

@@ -3,7 +3,8 @@ unit TSWebDriver.IElement;
 interface
 
 uses
-  System.Types, System.JSON, System.Generics.Collections, TSWebDriver.By;
+  System.Types, System.JSON, System.Generics.Collections, TSWebDriver.By,
+  TSWebDriver.Consts;
 
 type
   ITSWebDriverElement = interface;
@@ -28,8 +29,8 @@ type
     function GetCssValue(const propertyName: string): string;
     procedure LoadFromJson(const AJson: string);
     function IsEmpty(): Boolean;
-    function FindElement(AValue: TSBy): ITSWebDriverElement;
-    function FindElements(AValue: TSBy): TTSWebDriverElementList;
+    function FindElement(AValue: TSBy; AW3C_COMMAND_MAP: TW3C_COMMAND_MAP = FIND_ELEMENT): ITSWebDriverElement;
+    function FindElements(AValue: TSBy; AW3C_COMMAND_MAP: TW3C_COMMAND_MAP = FIND_ELEMENTS): TTSWebDriverElementList;
   end;
 
 implementation

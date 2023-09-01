@@ -20,14 +20,14 @@ type
     destructor Destroy(); override;
     function Execute(): ITSWebDriverRequest;
     function NewSession(): ITSWebDriverBrowser;
-    function CloseSection(): ITSWebDriverBrowser;
+    function CloseSession(): ITSWebDriverBrowser;
     function NavigateTo(AUrl: string): ITSWebDriverBrowser;
     function ExecuteSyncScript(AScript: string; AParameters: string = '{}'; AArgs: string = '[]'): string;
     function ExecuteAsyncScript(AScript: string; AParameters: string = '{}'; AArgs: string = '[]'): string;
     function SessionID(): string; overload;
     function SessionID(AValue: string): ITSWebDriverBrowser; overload;
-    function FindElement(AValue: TSBy): ITSWebDriverElement;
-    function FindElements(AValue: TSBy): TTSWebDriverElementList;
+    function FindElement(AValue: TSBy; AElementId: string = ''): ITSWebDriverElement;
+    function FindElements(AValue: TSBy; AElementId: string = ''): TTSWebDriverElementList;
     function TakeScreenshot(): string;
     function Status(): Boolean;
     function AddArgument(AValue: string): ITSWebDriverBrowser;
@@ -59,7 +59,7 @@ end;
 
 destructor TTSWebDriverBrowserBase.Destroy();
 begin
-  Self.CloseSection();;
+  Self.CloseSession();
 
   if Assigned(FDriverArguments) then
     FreeAndNil(FDriverArguments);
@@ -78,7 +78,7 @@ begin
   Execute.Post(MakeURL(FSessionID, GO_BACK));
 end;
 
-function TTSWebDriverBrowserBase.CloseSection(): ITSWebDriverBrowser;
+function TTSWebDriverBrowserBase.CloseSession(): ITSWebDriverBrowser;
 begin
   Result := Self;
   if FSessionID.IsEmpty then Exit;
@@ -87,8 +87,6 @@ begin
 end;
 
 function TTSWebDriverBrowserBase.ExecuteSyncScript(AScript: string; AParameters: string = '{}'; AArgs: string = '[]'): string;
-var
-  lResponseData: string;
 begin
   Result := EmptyStr;
 
@@ -102,8 +100,6 @@ begin
 end;
 
 function TTSWebDriverBrowserBase.ExecuteAsyncScript(AScript: string; AParameters: string = '{}'; AArgs: string = '[]'): string;
-var
-  lResponseData: string;
 begin
   Result := EmptyStr;
 
@@ -116,29 +112,41 @@ begin
   Result := Execute.Get(MakeURL(FSessionID, SCREENSHOT));
 end;
 
-function TTSWebDriverBrowserBase.FindElement(AValue: TSBy): ITSWebDriverElement;
+function TTSWebDriverBrowserBase.FindElement(AValue: TSBy; AElementId: string = ''): ITSWebDriverElement;
 var
   lResponseData: string;
+  lUrl: string;
 begin
   Result := TTSWebDriverElement.New(Self);
 
-  lResponseData := Execute.Post(MakeURL(FSessionID, FIND_ELEMENT),
+  if AElementId.IsEmpty then
+    lUrl := MakeURL(FSessionID, FIND_ELEMENT)
+  else
+    lUrl := MakeURL(FSessionID, FIND_CHILD_ELEMENT).Replace(':id', AElementId);
+
+  lResponseData := Execute.Post(lUrl,
     Format('{"using":"%s","value":"%s"}', [AValue.UsingName, AValue.KeyName]));
 
   if lResponseData <> EmptyStr then
     Result.LoadFromJson(lResponseData);
 end;
 
-function TTSWebDriverBrowserBase.FindElements(AValue: TSBy): TTSWebDriverElementList;
+function TTSWebDriverBrowserBase.FindElements(AValue: TSBy; AElementId: string = ''): TTSWebDriverElementList;
 var
   lResponseData: string;
+  lUrl: string;
   lJsonValue: TJSONValue;
   lJsonArray: TJSONArray;
   lTSWebDriverElement: ITSWebDriverElement;
 begin
   Result := TTSWebDriverElementList.Create([]);
   try
-    lResponseData := Execute.Post(MakeURL(FSessionID, FIND_ELEMENTS),
+    if AElementId.IsEmpty then
+      lUrl := MakeURL(FSessionID, FIND_ELEMENTS)
+    else
+      lUrl := MakeURL(FSessionID, FIND_CHILD_ELEMENTS).Replace(':id', AElementId);
+
+    lResponseData := Execute.Post(lUrl,
       Format('{"using":"%s","value":"%s"}', [AValue.UsingName, AValue.KeyName]));
 
     if lResponseData = EmptyStr then Exit;

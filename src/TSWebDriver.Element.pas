@@ -13,6 +13,7 @@ type
     FElementRef: string;
     FElementID: string;
     FIsEmpty: Boolean;
+    [weak]
     FDriver: ITSWebDriverBrowser;
   public
     class function New(const AParentDriver: ITSWebDriverBrowser): TTSWebDriverElement;
@@ -35,8 +36,8 @@ type
     function GetCssValue(const propertyName: string): string;
     procedure LoadFromJson(const AJson: string);
     function IsEmpty(): Boolean;
-    function FindElement(AValue: TSBy): ITSWebDriverElement;
-    function FindElements(AValue: TSBy): TTSWebDriverElementList;
+    function FindElement(AValue: TSBy; AW3C_COMMAND_MAP: TW3C_COMMAND_MAP = FIND_ELEMENT): ITSWebDriverElement;
+    function FindElements(AValue: TSBy; AW3C_COMMAND_MAP: TW3C_COMMAND_MAP = FIND_ELEMENTS): TTSWebDriverElementList;
   end;
 
 implementation
@@ -54,52 +55,14 @@ begin
   FDriver := AParentDriver;
 end;
 
-function TTSWebDriverElement.FindElement(AValue: TSBy): ITSWebDriverElement;
-var
-  lResponseData: string;
+function TTSWebDriverElement.FindElement(AValue: TSBy; AW3C_COMMAND_MAP: TW3C_COMMAND_MAP = FIND_ELEMENT): ITSWebDriverElement;
 begin
-  Result := TTSWebDriverElement.New(FDriver);
-
-  lResponseData := FDriver.Execute.Post(
-    MakeURL(FDriver.SessionID, FIND_CHILD_ELEMENT).Replace(':id', FElementID),
-    Format('{"using":"%s","value":"%s"}', [AValue.UsingName, AValue.KeyName]));
-
-  if lResponseData <> EmptyStr then
-    Result.LoadFromJson(lResponseData);
+  Result := FDriver.FindElement(AValue, FElementID);
 end;
 
-function TTSWebDriverElement.FindElements(AValue: TSBy): TTSWebDriverElementList;
-var
-  lResponseData: string;
-  lJsonValue: TJSONValue;
-  lJsonArray: TJSONArray;
-  lTSWebDriverElement: ITSWebDriverElement;
+function TTSWebDriverElement.FindElements(AValue: TSBy; AW3C_COMMAND_MAP: TW3C_COMMAND_MAP = FIND_ELEMENTS): TTSWebDriverElementList;
 begin
-  Result := TTSWebDriverElementList.Create([]);
-  try
-    lResponseData := FDriver.Execute.Post(
-      MakeURL(FDriver.SessionID, FIND_CHILD_ELEMENTS).Replace(':id', FElementID),
-      Format('{"using":"%s","value":"%s"}', [AValue.UsingName, AValue.KeyName]));
-
-    if lResponseData = EmptyStr then Exit;
-
-    lJsonArray := TJSONObject.ParseJSONValue(lResponseData).AsType<TJSONArray>;
-
-    for lJsonValue in lJsonArray do
-    begin
-      lTSWebDriverElement := TTSWebDriverElement.New(FDriver);
-      lTSWebDriverElement.LoadFromJson(lJsonValue.ToJSON());
-      Result.Add(lTSWebDriverElement);
-    end;
-
-  finally
-    FreeAndNil(lJsonArray);
-  end;
-end;
-
-procedure TTSWebDriverElement.Clear;
-begin
-  raise Exception.Create('Not implemented!');
+  Result := FDriver.FindElements(AValue, FElementID);
 end;
 
 procedure TTSWebDriverElement.Click();
@@ -177,27 +140,15 @@ function TTSWebDriverElement.GetEnabled: Boolean;
 var
   lUrl: String;
 begin
-  Result := False;
-
   lUrl := MakeURL(FDriver.SessionID, IS_ELEMENT_ENABLED)
     .Replace(':id', FElementID, [rfIgnoreCase]);
 
   Result := FDriver.Execute.Get(lUrl).StartsWith('true', True);
 end;
 
-function TTSWebDriverElement.GetLocation: TPoint;
-begin
-  raise Exception.Create('Not implemented!');
-end;
-
 function TTSWebDriverElement.GetSelected: Boolean;
 begin
   Result := False;
-end;
-
-function TTSWebDriverElement.GetSize: TSize;
-begin
-  raise Exception.Create('Not implemented!');
 end;
 
 function TTSWebDriverElement.GetTagName: string;
@@ -260,7 +211,22 @@ end;
 
 procedure TTSWebDriverElement.Submit;
 begin
-  raise Exception.Create('Not implemented!');
+  raise Exception.Create('Not implemented');
+end;
+
+function TTSWebDriverElement.GetLocation: TPoint;
+begin
+  raise Exception.Create('Not implemented');
+end;
+
+procedure TTSWebDriverElement.Clear;
+begin
+  raise Exception.Create('Not implemented');
+end;
+
+function TTSWebDriverElement.GetSize: TSize;
+begin
+  raise Exception.Create('Not implemented');
 end;
 
 end.

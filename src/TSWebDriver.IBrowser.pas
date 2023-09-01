@@ -10,14 +10,14 @@ type
     ['{DAEFC929-0451-4D61-8773-D240736B3BCD}']
     function Execute(): ITSWebDriverRequest;
     function NewSession(): ITSWebDriverBrowser;
-    function CloseSection(): ITSWebDriverBrowser;
+    function CloseSession(): ITSWebDriverBrowser;
     function NavigateTo(AUrl: string): ITSWebDriverBrowser;
     function ExecuteSyncScript(AScript: string; AParameters: string = '{}'; AArgs: string = '[]'): string;
     function ExecuteAsyncScript(AScript: string; AParameters: string = '{}'; AArgs: string = '[]'): string;
     function SessionID(): string; overload;
     function SessionID(AValue: String): ITSWebDriverBrowser; overload;
-    function FindElement(AValue: TSBy): ITSWebDriverElement;
-    function FindElements(AValue: TSBy): TTSWebDriverElementList;
+    function FindElement(AValue: TSBy; AElementId: string = ''): ITSWebDriverElement;
+    function FindElements(AValue: TSBy; AElementId: string = ''): TTSWebDriverElementList;
     function TakeScreenshot(): String;
     function Status(): Boolean;
     function AddArgument(AValue: String): ITSWebDriverBrowser;

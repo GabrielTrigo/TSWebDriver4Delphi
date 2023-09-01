@@ -2,7 +2,7 @@ program ExampleTSWebDriver;
 
 uses
   Vcl.Forms,
-  uExampleTSWebDriver in 'uExampleTSWebDriver.pas' {Form1},
+  uExampleTSWebDriver in 'uExampleTSWebDriver.pas' {FrmMain},
   TSWebDriver.Browser in '..\src\TSWebDriver.Browser.pas',
   TSWebDriver.Browsers in '..\src\TSWebDriver.Browsers.pas',
   TSWebDriver.By in '..\src\TSWebDriver.By.pas',
@@ -23,7 +23,7 @@ uses
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
-  Application.CreateForm(TForm1, Form1);
+  Application.CreateForm(TFrmMain, FrmMain);
   Application.Run;
 
 end.
