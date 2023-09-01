@@ -110,7 +110,7 @@
         <DCCReference Include="..\src\TSWebDriver.By.pas"/>
         <DCCReference Include="..\src\TSWebDriver.Browser.pas"/>
         <DCCReference Include="..\src\TSWebDriver.IBrowser.pas"/>
-        <DCCReference Include="TSWebDriver4Delphi.Test.Base.pas"/>
+        <DCCReference Include="TSWebDriver4Delphi.Test.Driver.pas"/>
         <RcItem Include="..\src\commom\js\get-attribute.js">
             <ContainerId>ResourceItem</ContainerId>
             <ResourceType>RCDATA</ResourceType>

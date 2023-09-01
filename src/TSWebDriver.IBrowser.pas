@@ -10,7 +10,7 @@ type
     ['{DAEFC929-0451-4D61-8773-D240736B3BCD}']
     function Execute(): ITSWebDriverRequest;
     function NewSession(): ITSWebDriverBrowser;
-    function CloseSection(AValue: String = ''): ITSWebDriverBrowser;
+    function CloseSection(): ITSWebDriverBrowser;
     function NavigateTo(AUrl: string): ITSWebDriverBrowser;
     function ExecuteSyncScript(AScript: string; AParameters: string = '{}'; AArgs: string = '[]'): string;
     function ExecuteAsyncScript(AScript: string; AParameters: string = '{}'; AArgs: string = '[]'): string;

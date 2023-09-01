@@ -59,14 +59,12 @@ end;
 
 function TTSWebDriverBase.Browser(): ITSWebDriverBrowsers;
 begin
-  Self.Start();
   Result := TTSWebDriverBrowsers.New();
 end;
 
 destructor TTSWebDriverBase.Destroy();
 begin
   Self.Stop();
-
   inherited;
 end;
 
@@ -78,8 +76,7 @@ begin
     raise Exception.Create('driver file not exists.' +
       FSWebDriverBaseOptions.DriverPath);
 
-  if FProcessInfo.hProcess <> 0 then
-    Exit;
+  if Self.IsRunning() or (FProcessInfo.hProcess <> 0) then Exit;
 
   FillChar(FStartupInfo, SizeOf(FStartupInfo), 0);
   FillChar(FProcessInfo, SizeOf(FProcessInfo), 0);

@@ -55,13 +55,46 @@ begin
 end;
 
 function TTSWebDriverElement.FindElement(AValue: TSBy): ITSWebDriverElement;
+var
+  lResponseData: string;
 begin
-  Result := FDriver.FindElement(AValue);
+  Result := TTSWebDriverElement.New(FDriver);
+
+  lResponseData := FDriver.Execute.Post(
+    MakeURL(FDriver.SessionID, FIND_CHILD_ELEMENT).Replace(':id', FElementID),
+    Format('{"using":"%s","value":"%s"}', [AValue.UsingName, AValue.KeyName]));
+
+  if lResponseData <> EmptyStr then
+    Result.LoadFromJson(lResponseData);
 end;
 
 function TTSWebDriverElement.FindElements(AValue: TSBy): TTSWebDriverElementList;
+var
+  lResponseData: string;
+  lJsonValue: TJSONValue;
+  lJsonArray: TJSONArray;
+  lTSWebDriverElement: ITSWebDriverElement;
 begin
-  Result := FDriver.FindElements(AValue);
+  Result := TTSWebDriverElementList.Create([]);
+  try
+    lResponseData := FDriver.Execute.Post(
+      MakeURL(FDriver.SessionID, FIND_CHILD_ELEMENTS).Replace(':id', FElementID),
+      Format('{"using":"%s","value":"%s"}', [AValue.UsingName, AValue.KeyName]));
+
+    if lResponseData = EmptyStr then Exit;
+
+    lJsonArray := TJSONObject.ParseJSONValue(lResponseData).AsType<TJSONArray>;
+
+    for lJsonValue in lJsonArray do
+    begin
+      lTSWebDriverElement := TTSWebDriverElement.New(FDriver);
+      lTSWebDriverElement.LoadFromJson(lJsonValue.ToJSON());
+      Result.Add(lTSWebDriverElement);
+    end;
+
+  finally
+    FreeAndNil(lJsonArray);
+  end;
 end;
 
 procedure TTSWebDriverElement.Clear;

@@ -20,7 +20,7 @@ type
     destructor Destroy(); override;
     function Execute(): ITSWebDriverRequest;
     function NewSession(): ITSWebDriverBrowser;
-    function CloseSection(AValue: string = ''): ITSWebDriverBrowser;
+    function CloseSection(): ITSWebDriverBrowser;
     function NavigateTo(AUrl: string): ITSWebDriverBrowser;
     function ExecuteSyncScript(AScript: string; AParameters: string = '{}'; AArgs: string = '[]'): string;
     function ExecuteAsyncScript(AScript: string; AParameters: string = '{}'; AArgs: string = '[]'): string;
@@ -78,13 +78,12 @@ begin
   Execute.Post(MakeURL(FSessionID, GO_BACK));
 end;
 
-function TTSWebDriverBrowserBase.CloseSection(AValue: string = ''): ITSWebDriverBrowser;
+function TTSWebDriverBrowserBase.CloseSection(): ITSWebDriverBrowser;
 begin
-  if AValue.IsEmpty then AValue := FSessionID;
-
+  Result := Self;
+  if FSessionID.IsEmpty then Exit;
   Execute.Delete(MakeURL(FSessionID, QUIT));
   FSessionID := EmptyStr;
-  Result := Self;
 end;
 
 function TTSWebDriverBrowserBase.ExecuteSyncScript(AScript: string; AParameters: string = '{}'; AArgs: string = '[]'): string;

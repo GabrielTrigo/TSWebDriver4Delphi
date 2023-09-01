@@ -41,9 +41,9 @@ begin
   begin
     ContentType := 'application/json';
     AcceptEncoding := 'UTF-8';
-    ConnectionTimeout := 1000;
-    SendTimeout := 3000;
-    ResponseTimeout := 3000;
+    ConnectionTimeout := 10000;
+    SendTimeout := 10000;
+    ResponseTimeout := 10000;
   end;
 end;
 

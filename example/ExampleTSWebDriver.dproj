@@ -106,18 +106,20 @@
             <Form>Form1</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="..\src\TSWebDriver.Browser.pas"/>
         <DCCReference Include="..\src\TSWebDriver.Browsers.pas"/>
+        <DCCReference Include="..\src\TSWebDriver.By.pas"/>
         <DCCReference Include="..\src\TSWebDriver.Chrome.pas"/>
         <DCCReference Include="..\src\TSWebDriver.Consts.pas"/>
         <DCCReference Include="..\src\TSWebDriver.Driver.pas"/>
         <DCCReference Include="..\src\TSWebDriver.Element.pas"/>
+        <DCCReference Include="..\src\TSWebDriver.IBrowser.pas"/>
         <DCCReference Include="..\src\TSWebDriver.IElement.pas"/>
         <DCCReference Include="..\src\TSWebDriver.Interfaces.pas"/>
         <DCCReference Include="..\src\TSWebDriver.pas"/>
         <DCCReference Include="..\src\TSWebDriver.Request.pas"/>
         <DCCReference Include="..\src\TSWebDriver.Response.pas"/>
         <DCCReference Include="..\src\TSWebDriver.Utils.pas"/>
-        <DCCReference Include="..\src\TSWebDriver.By.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

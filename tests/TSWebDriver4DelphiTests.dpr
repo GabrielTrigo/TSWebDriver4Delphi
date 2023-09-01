@@ -31,7 +31,7 @@ uses
   TSWebDriver.By in '..\src\TSWebDriver.By.pas',
   TSWebDriver.Browser in '..\src\TSWebDriver.Browser.pas',
   TSWebDriver.IBrowser in '..\src\TSWebDriver.IBrowser.pas',
-  TSWebDriver4Delphi.Test.Base in 'TSWebDriver4Delphi.Test.Base.pas';
+  TSWebDriver4Delphi.Test.Driver in 'TSWebDriver4Delphi.Test.Driver.pas';
 
 {$IFNDEF TESTINSIGHT}
 var
