@@ -45,6 +45,8 @@ type
 
 implementation
 
+//{$R aaaa.drc}
+
 { TTSWebDriverBrowserBase }
 
 class function TTSWebDriverBrowserBase.New(): ITSWebDriverBrowser;
@@ -139,7 +141,7 @@ var
   lJsonArray: TJSONArray;
   lTSWebDriverElement: ITSWebDriverElement;
 begin
-  Result := TTSWebDriverElementList.Create([]);
+  Result := TTSWebDriverElementList.Create();
   try
     if AElementId.IsEmpty then
       lUrl := MakeURL(FSessionID, FIND_ELEMENTS)

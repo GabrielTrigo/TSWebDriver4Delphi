@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="23d21552-ddf1-417d-942f-b3986f58adb0" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/example/test.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ExampleTSWebDriver.dpr" beforeDir="false" afterPath="$PROJECT_DIR$/example/ExampleTSWebDriver.dpr" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ExampleTSWebDriver.dproj" beforeDir="false" afterPath="$PROJECT_DIR$/example/ExampleTSWebDriver.dproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/uExampleTSWebDriver.dfm" beforeDir="false" afterPath="$PROJECT_DIR$/example/uExampleTSWebDriver.dfm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/uExampleTSWebDriver.pas" beforeDir="false" afterPath="$PROJECT_DIR$/example/uExampleTSWebDriver.pas" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TSWebDriver.Browser.pas" beforeDir="false" afterPath="$PROJECT_DIR$/src/TSWebDriver.Browser.pas" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TSWebDriver.Consts.pas" beforeDir="false" afterPath="$PROJECT_DIR$/src/TSWebDriver.Consts.pas" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TSWebDriver.Driver.pas" beforeDir="false" afterPath="$PROJECT_DIR$/src/TSWebDriver.Driver.pas" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TSWebDriver.Element.pas" beforeDir="false" afterPath="$PROJECT_DIR$/src/TSWebDriver.Element.pas" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TSWebDriver.IBrowser.pas" beforeDir="false" afterPath="$PROJECT_DIR$/src/TSWebDriver.IBrowser.pas" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TSWebDriver.IElement.pas" beforeDir="false" afterPath="$PROJECT_DIR$/src/TSWebDriver.IElement.pas" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/TSWebDriver.Interfaces.pas" beforeDir="false" afterPath="$PROJECT_DIR$/src/TSWebDriver.Interfaces.pas" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2UoNhIiEK8vYelTMUzZULNu8f9w" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "nodejs_package_manager_path": "npm"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="23d21552-ddf1-417d-942f-b3986f58adb0" name="Changes" comment="" />
+      <created>1693602096535</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1693602096535</updated>
+      <workItem from="1693602096549" duration="4000" />
+    </task>
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+</project>

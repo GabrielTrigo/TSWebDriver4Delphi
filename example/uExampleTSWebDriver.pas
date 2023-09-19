@@ -47,12 +47,10 @@ type
 var
   FrmMain: TFrmMain;
 
-const
-  USER_DATA_DIR_ARG = '--user-data-dir=E:\\Dev\\Delphi\\TSWebDriver4Delphi\\example\\cache';
-
 implementation
 
 {$R *.dfm}
+{$R 'res_.res' 'rc_.rc'}
 
 procedure TFrmMain.FormCreate(Sender: TObject);
 begin
@@ -68,7 +66,7 @@ begin
   FChromeDriver
     //.AddArgument('--start-maximized')
     .AddArgument('--window-size=1000,800')
-    .AddArgument(USER_DATA_DIR_ARG);
+    .AddArgument('--user-data-dir=E:\\Dev\\Delphi\\TSWebDriver4Delphi\\example\\cache');
 
   FDriver.Start();
 end;
@@ -142,7 +140,10 @@ end;
 
 procedure TFrmMain.Button1Click(Sender: TObject);
 begin
-  ShowMessage(TFile.ReadAllText('test.txt'));
+  if(FindResource(hInstance, PChar('is_displayed'), RT_RCDATA) <> 0) then 
+  begin
+     ShowMessage('aa');
+  end
 end;
 
 procedure TFrmMain.ExampleChromeSearch;

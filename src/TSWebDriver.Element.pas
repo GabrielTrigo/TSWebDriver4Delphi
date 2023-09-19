@@ -182,7 +182,7 @@ var
 begin
   try
     try
-      lJSONObject := (TJSONValue.ParseJSONValue(AJson) as TJSONObject);
+      lJSONObject := (TJSONObject.ParseJSONValue(AJson) as TJSONObject);
       if (lJSONObject.Count <= 0) then
       begin
          FIsEmpty := True;
