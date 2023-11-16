@@ -94,19 +94,8 @@ begin
 end;
 
 function TTSWebDriverElement.GetAttribute(const attributeName: string): string;
-var
-  lResource: string;
 begin
-  lResource := LoadCustomResource('get_attribute');
-
-  if lResource.IsEmpty then
-  begin
-    raise Exception.Create('Resource not found');
-    Exit;
-  end;
-
-  Result := FDriver.ExecuteSyncScript(lResource, '{}',
-    Format('[{"%s": "%s"}, "%s"]', [FElementRef, FElementID, attributeName]));
+  Result := FDriver.ExecuteSyncScript(Format('getAttribute("%s")', [attributeName]));
 end;
 
 function TTSWebDriverElement.GetCssValue(const propertyName: string): string;
@@ -122,18 +111,14 @@ end;
 
 function TTSWebDriverElement.GetDisplayed: Boolean;
 var
-  lResource: string;
+  lResult: string;
 begin
-  lResource := LoadCustomResource('is_displayed');
+  Result := True;
 
-  if lResource.IsEmpty then
-  begin
-    raise Exception.Create('Resource not found');
-    Exit;
-  end;
-
-  Result := FDriver.ExecuteSyncScript(lResource, '{}',
-    Format('[{"%s": "%s"}]', [FElementRef, FElementID])).StartsWith('true', True);
+  if Self.GetCssValue('display').Contains('none') or
+     Self.GetCssValue('visibility').Contains('hidden')
+  then
+    Result := False;
 end;
 
 function TTSWebDriverElement.GetEnabled: Boolean;
@@ -211,22 +196,22 @@ end;
 
 procedure TTSWebDriverElement.Submit;
 begin
-  raise Exception.Create('Not implemented');
+  raise ENotImplemented.Create('Not implemented');
 end;
 
 function TTSWebDriverElement.GetLocation: TPoint;
 begin
-  raise Exception.Create('Not implemented');
+  raise ENotImplemented.Create('Not implemented');
 end;
 
 procedure TTSWebDriverElement.Clear;
 begin
-  raise Exception.Create('Not implemented');
+  raise ENotImplemented.Create('Not implemented');
 end;
 
 function TTSWebDriverElement.GetSize: TSize;
 begin
-  raise Exception.Create('Not implemented');
+  raise ENotImplemented.Create('Not implemented');
 end;
 
 end.

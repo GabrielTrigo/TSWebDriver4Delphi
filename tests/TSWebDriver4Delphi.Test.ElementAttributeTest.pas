@@ -57,7 +57,7 @@ end;
 
 procedure TElementAttributeTest.TearDown;
 begin
-  TDriverTest.ChromeDriver.CloseSection();
+  TDriverTest.ChromeDriver.CloseSession();
 end;
 
 /// <summary>

@@ -34,7 +34,7 @@ type
     FDriver: ITSWebDriverBase;
     FChromeDriver: ITSWebDriverBrowser;
     FBy: TSBy;
-    procedure Run(AProc: Tproc; AUrl: string);
+    procedure Run(AProc: Tproc; AUrl: string = ''; ACloseSection: Boolean = True);
     procedure ExampleLoginAndScrap;
     procedure ExampleDynamicElement;
     procedure ExampleGitHubBio;
@@ -50,39 +50,36 @@ var
 implementation
 
 {$R *.dfm}
-{$R 'res_.res' 'rc_.rc'}
 
 procedure TFrmMain.FormCreate(Sender: TObject);
 begin
   ReportMemoryLeaksOnShutdown := True;
 
-  FDriver := TTSWebDriver.New.Driver;
-  FDriver
-    .Options
-      .DriverPath('E:\Dev\WebDrivers\chromedriver.exe')
-    .&End;
+  FDriver := TTSWebDriver.New.Driver();
 
   FChromeDriver := FDriver.Browser().Chrome();
   FChromeDriver
-    //.AddArgument('--start-maximized')
-    .AddArgument('--window-size=1000,800')
-    .AddArgument('--user-data-dir=E:\\Dev\\Delphi\\TSWebDriver4Delphi\\example\\cache');
+    .AddArgument('window-size', '1000,800')
+    .AddArgument('user-data-dir', 'E:/Dev/Delphi/TSWebDriver4Delphi/example/cache');
 
   FDriver.Start();
 end;
 
-procedure TFrmMain.Run(AProc: Tproc; AUrl: string);
+procedure TFrmMain.Run(AProc: Tproc; AUrl: string = ''; ACloseSection: Boolean = True);
 begin
   MemLog.Clear();
 
   FChromeDriver.NewSession();
 
-  FChromeDriver.NavigateTo(AUrl);
+  if not AUrl.IsEmpty then
+    FChromeDriver.NavigateTo(AUrl);
+
   FChromeDriver.WaitForPageReady();
 
   AProc();
 
-  FChromeDriver.CloseSession();
+  if ACloseSection then
+    FChromeDriver.CloseSession();
 end;
 
 procedure TFrmMain.btnExample1Click(Sender: TObject);
@@ -134,16 +131,29 @@ end;
 
 procedure TFrmMain.btnNavigateToClick(Sender: TObject);
 begin
-  FChromeDriver.NavigateTo(
-    InputBox('Url', '', 'https://github.com/GabrielTrigo'));
+ Self.Run(procedure
+          begin
+            FChromeDriver.NavigateTo(
+              InputBox('Url', '', 'https://github.com/GabrielTrigo'));
+          end,
+  '', False);
 end;
 
 procedure TFrmMain.Button1Click(Sender: TObject);
 begin
-  if(FindResource(hInstance, PChar('is_displayed'), RT_RCDATA) <> 0) then 
-  begin
-     ShowMessage('aa');
-  end
+  Self.Run(
+    procedure
+    var
+      lCheckbox: ITSWebDriverElement;
+    begin
+      lCheckbox := FChromeDriver.FindElement(FBy.XPath('//input[@id=''checky'']'));
+
+      MemLog.Lines.AddPair('lCheckbox', lCheckbox.GetProperty('checked'));
+      lCheckbox.Click();
+      MemLog.Lines.AddPair('lCheckbox', lCheckbox.GetProperty('checked'));
+    end,
+    'file:///E:/dev/Delphi/TSWebDriver4Delphi/tests/mocks/formPage.html'
+  );
 end;
 
 procedure TFrmMain.ExampleChromeSearch;
@@ -175,16 +185,16 @@ begin
 
   with MemLog.Lines do
   begin
-    AddPair('Property style', lElement.GetProperty('style'));
-    AddPair('Property innerHtml', lElement.GetProperty('innerHtml'));
-    AddPair('CssValue "display"', lElement.GetCssValue('display'));
-    AddPair('CssValue "width"', lElement.GetCssValue('width'));
-    AddPair('CssValue "background-color"', lElement.GetCssValue('background-color'));
-    AddPair('GetText', lElement.GetText());
-    AddPair('GetTagName', lElement.GetTagName());
-    AddPair('GetEnabled', BoolToStr(lElement.GetEnabled, True));
-    AddPair('GetDisplayed', BoolToStr(lElement.GetDisplayed, True));
-    AddPair('GetPageSource', FChromeDriver.GetPageSource());
+    AddPair('Property style', lElement.GetProperty('style')).Add('');
+    AddPair('Property innerHtml', lElement.GetProperty('innerHtml')).Add('');
+    AddPair('CssValue "display"', lElement.GetCssValue('display')).Add('');
+    AddPair('CssValue "width"', lElement.GetCssValue('width')).Add('');
+    AddPair('CssValue "background-color"', lElement.GetCssValue('background-color')).Add('');
+    AddPair('GetText', lElement.GetText()).Add('');
+    AddPair('GetTagName', lElement.GetTagName()).Add('');
+    AddPair('GetEnabled', BoolToStr(lElement.GetEnabled, True)).Add('');
+    AddPair('GetDisplayed', BoolToStr(lElement.GetDisplayed, True)).Add('');
+    AddPair('GetPageSource', FChromeDriver.GetPageSource()).Add('');
   end;
 end;
 

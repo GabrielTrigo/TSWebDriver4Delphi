@@ -4,7 +4,6 @@ program TSWebDriver4DelphiTests;
 {$APPTYPE CONSOLE}
 {$ENDIF}
 {$STRONGLINKTYPES ON}
-{$R *.dres}
 
 uses
   System.SysUtils,

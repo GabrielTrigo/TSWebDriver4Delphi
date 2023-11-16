@@ -1,2 +1,0 @@
-get_attribute RCDATA ".\\commom\\js\\get-attribute.js"
-is_displayed RCDATA ".\\commom\\js\\is-displayed.js"

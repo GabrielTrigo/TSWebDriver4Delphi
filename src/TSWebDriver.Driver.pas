@@ -111,12 +111,13 @@ end;
 function TTSWebDriverBaseOptions.AddArgument(
   AValue: String): ITSWebDriverBaseOptions;
 begin
-  /// not implemented \\\
+  raise ENotImplemented.Create('Not implemented');
   Result := Self;
 end;
 
 constructor TTSWebDriverBaseOptions.Create(ATSWebDriverBase: ITSWebDriverBase);
 begin
+  FDriverPath := 'webdriver.exe';
   FTSWebDriverBase := ATSWebDriverBase;
 end;
 

@@ -36,7 +36,7 @@ end;
 
 procedure TCssValueTest.TearDown;
 begin
-  TDriverTest.ChromeDriver.CloseSection();
+  TDriverTest.ChromeDriver.CloseSession();
 end;
 
 procedure TCssValueTest.ShouldPickUpStyleOfAnElement;

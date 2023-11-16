@@ -20,7 +20,7 @@ type
     function FindElements(AValue: TSBy; AElementId: string = ''): TTSWebDriverElementList;
     function TakeScreenshot(): String;
     function Status(): Boolean;
-    function AddArgument(AValue: String): ITSWebDriverBrowser;
+    function AddArgument(AKey: String; AValue: String = ''): ITSWebDriverBrowser;
     function WaitForSelector(AValue: String; ATimeout: Integer = 10000): ITSWebDriverBrowser;
     function GetPageSource(): String;
     procedure WaitForPageReady(ATimeout: Integer = 15000);

@@ -8,7 +8,6 @@ uses
 
 function MakeURL(const ASessionID: string; const APath: TW3C_COMMAND_MAP): string;
 function ProccessIsRunning(APartialTitle: string): Boolean;
-function LoadCustomResource(AResourceIdentifier: string): string;
 
 implementation
 
@@ -37,25 +36,6 @@ begin
     hWndTemp := GetWindow(hWndTemp, GW_HWNDNEXT);
   end;
   result := hWndTemp <> 0;
-end;
-
-function LoadCustomResource(AResourceIdentifier: string): string;
-var
-  lResourceStream: TResourceStream;
-  lStrings: TStrings;
-begin
-  lResourceStream := TResourceStream.Create(HInstance, AResourceIdentifier, RT_RCDATA);
-  try
-    lStrings := TStringList.Create;
-    try
-      lStrings.LoadFromStream(lResourceStream);
-      Result := lStrings.Text;
-    finally
-      FreeAndNil(lStrings);
-    end;
-  finally
-    FreeAndNil(lResourceStream);
-  end
 end;
 
 end.

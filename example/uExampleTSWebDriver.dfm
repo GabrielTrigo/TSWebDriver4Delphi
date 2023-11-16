@@ -98,8 +98,8 @@ object FrmMain: TFrmMain
     OnClick = btnExample3Click
   end
   object Button1: TButton
-    Left = 424
-    Top = 24
+    Left = 296
+    Top = 41
     Width = 75
     Height = 25
     Caption = 'Button1'

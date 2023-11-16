@@ -30,7 +30,7 @@ type
     function FindElements(AValue: TSBy; AElementId: string = ''): TTSWebDriverElementList;
     function TakeScreenshot(): string;
     function Status(): Boolean;
-    function AddArgument(AValue: string): ITSWebDriverBrowser;
+    function AddArgument(AKey: String; AValue: String = ''): ITSWebDriverBrowser;
     function WaitForSelector(AValue: string; ATimeout: Integer = 15000): ITSWebDriverBrowser;
     procedure WaitForPageReady(ATimeout: Integer = 15000);
     function GetPageSource(): String;
@@ -44,8 +44,6 @@ type
   end;
 
 implementation
-
-//{$R aaaa.drc}
 
 { TTSWebDriverBrowserBase }
 
@@ -69,9 +67,16 @@ begin
   inherited;
 end;
 
-function TTSWebDriverBrowserBase.AddArgument(AValue: string): ITSWebDriverBrowser;
+function TTSWebDriverBrowserBase.AddArgument(AKey: String; AValue: String = ''): ITSWebDriverBrowser;
 begin
-  FDriverArguments.Add(AValue);
+  AKey := AKey.Trim().ToLower();
+  AValue := AValue.Trim().ToLower();
+
+  if not AValue.IsEmpty then
+    FDriverArguments.Add(AnsiQuotedStr(Format('--%s:%s', [AKey, AValue]), '"'))
+  else
+    FDriverArguments.Add(AnsiQuotedStr(Format('--%s', [AKey]), '"'));
+
   Result := Self;
 end;
 
@@ -236,8 +241,7 @@ begin
 
   if FDriverArguments.Count <= 0 then Exit;
 
-  for lArgument in FDriverArguments do
-    Result := Result + ', ' + AnsiQuotedStr(lArgument, '"');
+  Result := ',' + String.Join(',', FDriverArguments.ToStringArray());
 end;
 
 function TTSWebDriverBrowserBase.SessionID(AValue: string): ITSWebDriverBrowser;
