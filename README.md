@@ -1,7 +1,7 @@
 [![stability-alpha](https://img.shields.io/badge/stability-alpha-f4d03f.svg)](https://github.com/mkenney/software-guides/blob/master/STABILITY-BADGES.md#alpha)
 
 # TSWebDriver4Delphi
-This library was inspired by [Selenium](https://github.com/SeleniumHQ/selenium)
+This library was inspired by [Selenium](https://github.com/SeleniumHQ/selenium) and [Puppeteer](https://pptr.dev)
 
 TSWebDriver4Delphi is a comprehensive project that encapsulates a variety of tools that enable web browser automation. Specifically provides an infrastructure for the W3C WebDriver specification - a platform and language-neutral coding interface compatible with the Chrome browser (for now, only Chrome).
 
