@@ -19,7 +19,9 @@ _Provided is a set of interfaces to discover and manipulate DOM elements in web 
 
 
 # Demo
-![ezgif com-video-to-gif (2)](https://github.com/GabrielTrigo/TSWebDriver4Delphi/assets/43503837/912ca229-ad64-4fb5-b33c-6cdb3af65d5f)
+_Scraping fake store_
+<br/>
+![ezgif com-video-to-gif (2)](img/demo.gif)
 
 
 # Example
