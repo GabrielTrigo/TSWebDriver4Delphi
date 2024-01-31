@@ -34,7 +34,7 @@ type
     FDriver: ITSWebDriverBase;
     FChromeDriver: ITSWebDriverBrowser;
     FBy: TSBy;
-    procedure Run(AProc: Tproc; AUrl: string = ''; ACloseSection: Boolean = True);
+    procedure Run(AProc: TProc; AUrl: string = ''; ACloseSection: Boolean = True);
     procedure ExampleLoginAndScrap;
     procedure ExampleDynamicElement;
     procedure ExampleGitHubBio;
@@ -56,16 +56,17 @@ begin
   ReportMemoryLeaksOnShutdown := True;
 
   FDriver := TTSWebDriver.New.Driver();
+  //FDriver.Options.DriverPath('.\a\b\c\webdriver.exe');
 
   FChromeDriver := FDriver.Browser().Chrome();
-  FChromeDriver
-    .AddArgument('window-size', '1000,800')
-    .AddArgument('user-data-dir', 'E:/Dev/Delphi/TSWebDriver4Delphi/example/cache');
+  //FChromeDriver
+    //.AddArgument('window-size', '1000,800')
+    //.AddArgument('user-data-dir', 'E:/Dev/Delphi/TSWebDriver4Delphi/example/cache');
 
   FDriver.Start();
 end;
 
-procedure TFrmMain.Run(AProc: Tproc; AUrl: string = ''; ACloseSection: Boolean = True);
+procedure TFrmMain.Run(AProc: TProc; AUrl: string = ''; ACloseSection: Boolean = True);
 begin
   MemLog.Clear();
 
@@ -131,7 +132,7 @@ end;
 
 procedure TFrmMain.btnNavigateToClick(Sender: TObject);
 begin
- Self.Run(procedure
+  Self.Run(procedure
           begin
             FChromeDriver.NavigateTo(
               InputBox('Url', '', 'https://github.com/GabrielTrigo'));
@@ -144,13 +145,13 @@ begin
   Self.Run(
     procedure
     var
-      lCheckbox: ITSWebDriverElement;
+      LCheckbox: ITSWebDriverElement;
     begin
-      lCheckbox := FChromeDriver.FindElement(FBy.XPath('//input[@id=''checky'']'));
+      LCheckbox := FChromeDriver.FindElement(FBy.XPath('//input[@id=''checky'']'));
 
-      MemLog.Lines.AddPair('lCheckbox', lCheckbox.GetProperty('checked'));
-      lCheckbox.Click();
-      MemLog.Lines.AddPair('lCheckbox', lCheckbox.GetProperty('checked'));
+      MemLog.Lines.AddPair('LCheckbox', LCheckbox.GetProperty('checked'));
+      LCheckbox.Click();
+      MemLog.Lines.AddPair('LCheckbox', LCheckbox.GetProperty('checked'));
     end,
     'file:///E:/dev/Delphi/TSWebDriver4Delphi/tests/mocks/formPage.html'
   );
@@ -158,42 +159,42 @@ end;
 
 procedure TFrmMain.ExampleChromeSearch;
 var
-  lElement: ITSWebDriverElement;
+  LElement: ITSWebDriverElement;
 begin
-  lElement := FChromeDriver.FindElement(FBy.ClassName('search-box__input'));
+  LElement := FChromeDriver.FindElement(FBy.ClassName('search-box__input'));
 
-  lElement.SendKeys('automate');
+  LElement.SendKeys('automate');
 
   FChromeDriver.WaitForSelector('.search-box__link');
 
-  lElement := FChromeDriver.FindElement(FBy.ClassName('search-box__link'));
+  LElement := FChromeDriver.FindElement(FBy.ClassName('search-box__link'));
 
-  lElement.Click();
+  LElement.Click();
 end;
 
 procedure TFrmMain.ExampleDynamicElement;
 var
-  lElement: ITSWebDriverElement;
+  LElement: ITSWebDriverElement;
 begin
-  lElement := FChromeDriver.FindElement(FBy.Id('adder'));
+  LElement := FChromeDriver.FindElement(FBy.Id('adder'));
 
-  lElement.Click();
+  LElement.Click();
 
   FChromeDriver.WaitForSelector('#box0');
 
-  lElement := FChromeDriver.FindElement(FBy.Id('box0'));
+  LElement := FChromeDriver.FindElement(FBy.Id('box0'));
 
   with MemLog.Lines do
   begin
-    AddPair('Property style', lElement.GetProperty('style')).Add('');
-    AddPair('Property innerHtml', lElement.GetProperty('innerHtml')).Add('');
-    AddPair('CssValue "display"', lElement.GetCssValue('display')).Add('');
-    AddPair('CssValue "width"', lElement.GetCssValue('width')).Add('');
-    AddPair('CssValue "background-color"', lElement.GetCssValue('background-color')).Add('');
-    AddPair('GetText', lElement.GetText()).Add('');
-    AddPair('GetTagName', lElement.GetTagName()).Add('');
-    AddPair('GetEnabled', BoolToStr(lElement.GetEnabled, True)).Add('');
-    AddPair('GetDisplayed', BoolToStr(lElement.GetDisplayed, True)).Add('');
+    AddPair('Property style', LElement.GetProperty('style')).Add('');
+    AddPair('Property innerHtml', LElement.GetProperty('innerHtml')).Add('');
+    AddPair('CssValue "display"', LElement.GetCssValue('display')).Add('');
+    AddPair('CssValue "width"', LElement.GetCssValue('width')).Add('');
+    AddPair('CssValue "background-color"', LElement.GetCssValue('background-color')).Add('');
+    AddPair('GetText', LElement.GetText()).Add('');
+    AddPair('GetTagName', LElement.GetTagName()).Add('');
+    AddPair('GetEnabled', BoolToStr(LElement.GetEnabled, True)).Add('');
+    AddPair('GetDisplayed', BoolToStr(LElement.GetDisplayed, True)).Add('');
     AddPair('GetPageSource', FChromeDriver.GetPageSource()).Add('');
   end;
 end;
@@ -214,44 +215,44 @@ end;
 
 procedure TFrmMain.ExampleGitHubFollowers;
 var
-  lElement: ITSWebDriverElement;
-  lElements: TTSWebDriverElementList;
+  LElement: ITSWebDriverElement;
+  LElements: TTSWebDriverElementList;
 begin
-  lElements := FChromeDriver.FindElements(FBy.CssSelector('.followers > article'));
+  LElements := FChromeDriver.FindElements(FBy.CssSelector('.followers > article'));
 
-  for lElement in lElements do
+  for LElement in LElements do
     with MemLog.Lines do
     begin
-      AddPair('Name', lElement.FindElement(FBy.TagName('h4')).GetText());
-      AddPair('Link', lElement.FindElement(FBy.TagName('a')).GetText());
+      AddPair('Name', LElement.FindElement(FBy.TagName('h4')).GetText());
+      AddPair('Link', LElement.FindElement(FBy.TagName('a')).GetText());
       Append('-------------------------');
     end;
 
-  FreeAndNil(lElements);
+  FreeAndNil(LElements);
 end;
 
 procedure TFrmMain.ExampleLoginAndScrap;
 var
-  lElement: ITSWebDriverElement;
-  lElements: TTSWebDriverElementList;
+  LElement: ITSWebDriverElement;
+  LElements: TTSWebDriverElementList;
 begin
   try
     FChromeDriver.FindElement(FBy.Name('user-name')).SendKeys('standard_user');
     FChromeDriver.FindElement(FBy.ID('password')).SendKeys('secret_sauce');
     FChromeDriver.FindElement(FBy.Name('login-button')).Click();
 
-    lElements := FChromeDriver.FindElements(FBy.ClassName('inventory_item'));
+    LElements := FChromeDriver.FindElements(FBy.ClassName('inventory_item'));
 
-    for lElement in lElements do
+    for LElement in LElements do
       with MemLog.Lines do
       begin
-        AddPair('Name', lElement.FindElement(FBy.ClassName('inventory_item_name')).GetText());
-        AddPair('Description', lElement.FindElement(FBy.ClassName('inventory_item_desc')).GetText());
-        AddPair('Price', lElement.FindElement(FBy.ClassName('inventory_item_price')).GetText());
+        AddPair('Name', LElement.FindElement(FBy.ClassName('inventory_item_name')).GetText());
+        AddPair('Description', LElement.FindElement(FBy.ClassName('inventory_item_desc')).GetText());
+        AddPair('Price', LElement.FindElement(FBy.ClassName('inventory_item_price')).GetText());
         Append('-------------------------');
       end;
   finally
-    FreeAndNil(lElements);
+    FreeAndNil(LElements);
   end;
 end;
 

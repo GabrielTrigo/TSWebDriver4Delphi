@@ -34,15 +34,15 @@ class procedure TDriverTest.Start();
 begin
   if Assigned(FDriver) or Assigned(FChromeDriver) then Exit;
 
-  FDriver := TTSWebDriver.New.Driver;
+  FDriver := TTSWebDriver.New.Driver();
 
-  FDriver
-    .Options
-      .DriverPath('E:\Dev\WebDrivers\chromedriver.exe')
-    .&End;
+  //  FDriver
+  //    .Options
+  //      .DriverPath('..\example\bin\webdriver.exe')
+  //    .&End;
 
   FChromeDriver := FDriver.Browser().Chrome();
-  FChromeDriver.AddArgument('--headless=new');
+  //FChromeDriver.AddArgument('--headless=new');
 
   FDriver.Start();
 end;

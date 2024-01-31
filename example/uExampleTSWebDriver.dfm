@@ -1,6 +1,7 @@
 object FrmMain: TFrmMain
   Left = 0
   Top = 0
+  Caption = 'Example TSWebDriver4Delphi'
   ClientHeight = 351
   ClientWidth = 528
   Color = clBtnFace

@@ -3,8 +3,7 @@ unit TSWebDriver.Request;
 interface
 
 uses
-  System.Net.HttpClientComponent, System.Classes, System.SysUtils,
-  TSWebDriver.Response;
+  System.SysUtils, TSWebDriver.Response;
 
 type
   ITSWebDriverRequest = interface
@@ -17,7 +16,6 @@ type
   TTSWebDriverRequest = class(TInterfacedObject, ITSWebDriverRequest)
   private
     FResponse: TTSResponse;
-    FNetHTTPClient: TNetHTTPClient;
     function HandleResponse(AJson: String): string;
   public
     class function New(): ITSWebDriverRequest;
@@ -32,58 +30,44 @@ implementation
 
 { TTSWebDriverRequest }
 
+uses RESTRequest4D;
+
 constructor TTSWebDriverRequest.Create();
 begin
   FResponse := TTSResponse.Create();
-  FNetHTTPClient := TNetHTTPClient.Create(nil);
-
-  with FNetHTTPClient do
-  begin
-    ContentType := 'application/json';
-    AcceptEncoding := 'UTF-8';
-    ConnectionTimeout := 10000;
-    SendTimeout := 10000;
-    ResponseTimeout := 10000;
-  end;
 end;
 
 destructor TTSWebDriverRequest.Destroy();
 begin
   FreeAndNil(FResponse);
-  FreeAndNil(FNetHTTPClient);
   inherited;
 end;
 
 function TTSWebDriverRequest.Get(AUrl: string): String;
 begin
-  Result := FNetHTTPClient.Get(AUrl).ContentAsString();
-  Result := HandleResponse(Result);
+  Result := HandleResponse(
+    TRequest.New.BaseURL(AUrl).Get().Content
+  );
 end;
 
 function TTSWebDriverRequest.Post(AUrl: string; AData: string = '{}'): String;
-var
-  lData: TStringStream;
 begin
-  try
-    lData := TStringStream.Create(AData, TEncoding.UTF8);
-    Result := FNetHTTPClient.Post(AUrl, lData).ContentAsString();
-    Result := HandleResponse(Result);
-  finally
-    FreeAndNil(lData);
-  end;
+  Result := HandleResponse(
+    TRequest
+    .New
+    //.RaiseExceptionOn500(False)
+    .BaseURL(AUrl)
+    .AddBody(AData)
+    .Post()
+    .Content()
+  );
 end;
 
 function TTSWebDriverRequest.Delete(AUrl: string; AData: string = ''): String;
-var
-  lData: TStringStream;
 begin
-  try
-    lData := TStringStream.Create(AData, TEncoding.UTF8);
-    Result := FNetHTTPClient.Delete(AUrl, lData).ContentAsString();
-    Result := HandleResponse(Result);
-  finally
-    FreeAndNil(lData);
-  end;
+  Result := HandleResponse(
+    TRequest.New.BaseURL(AUrl).AddBody(AData).Delete().Content()
+  );
 end;
 
 function TTSWebDriverRequest.HandleResponse(AJson: String): string;

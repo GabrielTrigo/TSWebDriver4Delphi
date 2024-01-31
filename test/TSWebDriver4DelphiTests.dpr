@@ -15,21 +15,7 @@ uses
   DUnitX.TestFramework,
   TSWebDriver4Delphi.Test.CssValue in 'TSWebDriver4Delphi.Test.CssValue.pas',
   TSWebDriver4Delphi.Test.Utils in 'TSWebDriver4Delphi.Test.Utils.pas',
-  TSWebDriver.Browsers in '..\src\TSWebDriver.Browsers.pas',
-  TSWebDriver.Chrome in '..\src\TSWebDriver.Chrome.pas',
-  TSWebDriver.Consts in '..\src\TSWebDriver.Consts.pas',
-  TSWebDriver.Driver in '..\src\TSWebDriver.Driver.pas',
-  TSWebDriver.Element in '..\src\TSWebDriver.Element.pas',
-  TSWebDriver.IElement in '..\src\TSWebDriver.IElement.pas',
-  TSWebDriver.Interfaces in '..\src\TSWebDriver.Interfaces.pas',
-  TSWebDriver in '..\src\TSWebDriver.pas',
-  TSWebDriver.Request in '..\src\TSWebDriver.Request.pas',
-  TSWebDriver.Response in '..\src\TSWebDriver.Response.pas',
-  TSWebDriver.Utils in '..\src\TSWebDriver.Utils.pas',
   TSWebDriver4Delphi.Test.ElementAttributeTest in 'TSWebDriver4Delphi.Test.ElementAttributeTest.pas',
-  TSWebDriver.By in '..\src\TSWebDriver.By.pas',
-  TSWebDriver.Browser in '..\src\TSWebDriver.Browser.pas',
-  TSWebDriver.IBrowser in '..\src\TSWebDriver.IBrowser.pas',
   TSWebDriver4Delphi.Test.Driver in 'TSWebDriver4Delphi.Test.Driver.pas';
 
 {$IFNDEF TESTINSIGHT}

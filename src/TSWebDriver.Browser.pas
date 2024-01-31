@@ -201,23 +201,21 @@ end;
 
 function TTSWebDriverBrowserBase.NewSession(): ITSWebDriverBrowser;
 var
-  lData: string;
-  lResponseData: string;
+  LArgs,
+  LResponse: string;
+  LJSONResponse: TJSONValue;
 begin
-  //add extra args
-  lData := StringReplace(NEW_SESSION_JSON, '@extra_args', HandleCustomArgs(), [rfReplaceAll, rfIgnoreCase]);
+  //add extra args for webdriver session
+  LArgs := StringReplace(NEW_SESSION_JSON, '@extra_args', HandleCustomArgs(), [rfReplaceAll, rfIgnoreCase]);
 
-  lResponseData :=
-    Execute.Post(MakeURL(FSessionID, NEW_SESSION), lData);
+  LResponse :=
+    Execute.Post(MakeURL(FSessionID, NEW_SESSION), LArgs);
 
-  with TJSONObject.ParseJSONValue(lResponseData) do
-  begin
-    try
-      if not TryGetValue<string>('sessionId', FSessionID) then
-        raise Exception.Create('sessionId not found');
-    finally
-      Destroy();
-    end;
+  try
+    LJSONResponse := TJSONObject.ParseJSONValue(LResponse);
+    LJSONResponse.TryGetValue<string>('sessionId', FSessionID);
+  finally
+    FreeAndNil(LJSONResponse);
   end;
 
   Result := Self;
@@ -276,7 +274,7 @@ var
   isMainThread: Boolean;
   j: Integer;
 begin
-  isMainThread := (GetCurrentThreadId = MainThreadId);
+  isMainThread := (GetCurrentThreadId() = MainThreadId);
   I := 0;
   while (I < ATimeout) do
   begin
