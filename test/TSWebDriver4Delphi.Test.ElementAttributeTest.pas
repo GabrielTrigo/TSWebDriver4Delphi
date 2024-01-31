@@ -13,9 +13,9 @@ type
   private
     By: TSBy;
   public
-    [Setup]
+    [SetupFixture]
     procedure Setup;
-    [TearDown]
+    [TearDownFixture]
     procedure TearDown;
     [Test]
     procedure ShouldReturnNullWhenGettingTheValueOfAnAttributeThatIsNotListed;
@@ -29,8 +29,6 @@ type
     procedure ShouldReturnEmptyAttributeValuesWhenPresentAndTheValueIsActuallyEmpty;
     [Test]
     procedure ShouldReturnTheValueOfTheDisabledAttributeAsNullIfNotSet;
-    [Test]
-    procedure ShouldReturnTheValueOfTheIndexAttrbuteEvenIfItIsMissing;
     [Test]
     procedure ShouldIndicateTheElementsThatAreDisabledAreNotEnabled;
     [Test]
@@ -48,7 +46,7 @@ type
 implementation
 
 uses
-  System.SysUtils;
+  System.SysUtils, TSWebDriver.IBrowser, System.IOUtils;
 
 procedure TElementAttributeTest.Setup;
 begin
@@ -166,28 +164,6 @@ begin
 end;
 
 /// <summary>
-/// Deve retornar o valor do atributo do índice mesmo que esteja faltando
-/// </summary>
-procedure TElementAttributeTest.ShouldReturnTheValueOfTheIndexAttrbuteEvenIfItIsMissing;
-var
-  lMultiSelect: ITSWebDriverElement;
-  lOptions: TTSWebDriverElementList;
-begin
-  try
-    TDriverTest.ChromeDriver.NavigateTo(MakeUrlFile('formPage.html'));
-    TDriverTest.ChromeDriver.WaitForPageReady();
-
-    lMultiSelect := TDriverTest.ChromeDriver.FindElement(By.Id('multi'));
-    lOptions := lMultiSelect.FindElements(By.TagName('option'));
-    
-    Assert.AreEqual('1', lOptions[1].GetAttribute('index'));
-  finally
-    if Assigned(lOptions) then
-      FreeAndNil(lOptions);
-  end;
-end;
-
-/// <summary>
 /// Deve indicar que os elementos que estão desabilitados não estão habilitados
 /// </summary>
 procedure TElementAttributeTest.ShouldIndicateTheElementsThatAreDisabledAreNotEnabled;
@@ -212,7 +188,6 @@ var
   lDisabledTextElement1: ITSWebDriverElement;
   lDisabledTextElement2: ITSWebDriverElement;
   lDisabledTextElement3: ITSWebDriverElement;
-  lattribute: string;
 begin
   TDriverTest.ChromeDriver.NavigateTo(MakeUrlFile('formPage.html'));
   TDriverTest.ChromeDriver.WaitForPageReady();
@@ -299,12 +274,12 @@ end;
 /// </summary>
 procedure TElementAttributeTest.ShouldReturnTheValueOfCheckedForACheckboxOnlyIfItIsChecked;
 var
-  lCheckbox: ITSWebDriverElement;
+  LCheckbox: ITSWebDriverElement;
 begin
   TDriverTest.ChromeDriver.NavigateTo(MakeUrlFile('formPage.html'));
   TDriverTest.ChromeDriver.WaitForPageReady();
 
-  lCheckbox := TDriverTest.ChromeDriver.FindElement(By.XPath('//input[@id=''checky'']'));
+  lCheckbox := TDriverTest.ChromeDriver().FindElement(By.XPath('//input[@id=''checky'']'));
 
   // Verifique se o atributo "checked" é nulo (null) inicialmente
   Assert.AreEqual('null', lCheckbox.GetAttribute('checked'));

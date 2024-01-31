@@ -5,6 +5,8 @@ program TSWebDriver4DelphiTests;
 {$ENDIF}
 {$STRONGLINKTYPES ON}
 
+
+
 uses
   System.SysUtils,
   {$IFDEF TESTINSIGHT}
@@ -23,7 +25,7 @@ var
   runner: ITestRunner;
   results: IRunResults;
   logger: ITestLogger;
-  nunitLogger : ITestLogger;
+  //nunitLogger : ITestLogger;
 {$ENDIF}
 begin
 {$IFDEF TESTINSIGHT}
@@ -49,8 +51,8 @@ begin
       runner.AddLogger(logger);
     end;
     //Generate an NUnit compatible XML File
-    nunitLogger := TDUnitXXMLNUnitFileLogger.Create(TDUnitX.Options.XMLOutputFile);
-    runner.AddLogger(nunitLogger);
+    //nunitLogger := TDUnitXXMLNUnitFileLogger.Create(TDUnitX.Options.XMLOutputFile);
+    //runner.AddLogger(nunitLogger);
 
     //Run tests
     results := runner.Execute;

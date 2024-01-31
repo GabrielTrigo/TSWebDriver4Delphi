@@ -12,9 +12,9 @@ type
   private
     By: TSBy;
   public
-    [Setup]
+    [SetupFixture]
     procedure Setup;
-    [TearDown]
+    [TearDownFixture]
     procedure TearDown;
     [Test]
     procedure ShouldPickUpStyleOfAnElement;

@@ -3,9 +3,9 @@ unit TSWebDriver.Element;
 interface
 
 uses
-  TSWebDriver.Request, TSWebDriver.Utils, System.SysUtils,
-  TSWebDriver.Consts, TSWebDriver.IElement, System.Types, System.JSON,
-  TSWebDriver.By, TSWebDriver.IBrowser;
+  TSWebDriver.Request, TSWebDriver.Utils, System.SysUtils, System.Types,
+  System.JSON, System.Generics.Collections, TSWebDriver.Consts,
+  TSWebDriver.IElement, TSWebDriver.By, TSWebDriver.IBrowser;
 
 type
   TTSWebDriverElement = class(TInterfacedObject, ITSWebDriverElement)
@@ -15,6 +15,7 @@ type
     FIsEmpty: Boolean;
     [weak]
     FDriver: ITSWebDriverBrowser;
+    function GetResourceStream(AResourceName: string): string;
   public
     class function New(const AParentDriver: ITSWebDriverBrowser): TTSWebDriverElement;
     constructor Create(const AParentDriver: ITSWebDriverBrowser); reintroduce;
@@ -25,12 +26,12 @@ type
     function GetSelected: Boolean;
     function GetLocation: TPoint;
     function GetSize: TSize;
-    function GetDisplayed: Boolean;
+    function Displayed: Boolean;
     procedure Clear;
     procedure SendKeys(const text: string);
     procedure Submit();
     procedure Click();
-    function GetAttribute(const attributeName: string): string;
+    function GetAttribute(const AAttributeName: string): string;
     function GetDomAttribute(const attributeName: string): string;
     function GetProperty(const propertyName: string): string;
     function GetCssValue(const propertyName: string): string;
@@ -41,6 +42,11 @@ type
   end;
 
 implementation
+
+uses
+  System.Classes;
+
+{$R resources.res }
 
 { TTSWebDriverElement }
 
@@ -71,17 +77,6 @@ begin
       MakeURL(FDriver.SessionID, CLICK_ELEMENT).Replace(':id', FElementID, [rfIgnoreCase]), '{}');
 end;
 
-function TTSWebDriverElement.GetDomAttribute(const attributeName: string): string;
-var
-  lUrl: String;
-begin
-  lUrl := MakeURL(FDriver.SessionID, GET_ELEMENT_ATTRIBUTE)
-    .Replace(':id', FElementID, [rfIgnoreCase])
-    .Replace(':attributeName', attributeName, [rfIgnoreCase]);
-
-  Result := FDriver.Execute.Get(lUrl);
-end;
-
 function TTSWebDriverElement.GetProperty(const propertyName: string): string;
 var
   lUrl: String;
@@ -93,9 +88,114 @@ begin
   Result := FDriver.Execute.Get(lUrl);
 end;
 
-function TTSWebDriverElement.GetAttribute(const attributeName: string): string;
+function TTSWebDriverElement.GetResourceStream(AResourceName: string): string;
+var
+  LResourceText: TStringStream;
+  LResourceStream: TResourceStream;
 begin
-  Result := FDriver.ExecuteSyncScript(Format('getAttribute("%s")', [attributeName]));
+  LResourceStream := TResourceStream.Create(HInstance, AResourceName, RT_RCDATA);
+  try
+    LResourceText := TStringStream.Create;
+    try
+      LResourceText.LoadFromStream(LResourceStream);
+      Result := LResourceText.DataString;
+    finally
+      FreeAndNil(LResourceText);
+    end;
+  finally
+    FreeAndNil(LResourceStream);
+  end;
+end;
+
+/// <summary>
+/// Obtém o valor de um atributo HTML declarado deste elemento.
+/// </summary>
+/// <param name="attributeName">O nome do atributo HTML para obter o valor.</param>
+/// <returns>O valor atual do atributo HTML. Retorna <see langword="null"/> se o
+/// valor não estiver definido ou se o atributo declarado não existir.</returns>
+/// <remarks>
+/// Ao contrário do método <see cref="GetAttribute(string)"/>, este método
+/// retorna apenas atributos declarados na marcação HTML do elemento. Para acessar o valor
+/// de uma propriedade IDL do elemento, use o método <see cref="GetAttribute(string)"/>
+/// ou o método <see cref="GetDomProperty(string)"/>.
+/// </remarks>
+function TTSWebDriverElement.GetDomAttribute(const attributeName: string): string;
+var
+  lUrl: String;
+begin
+  lUrl := MakeURL(FDriver.SessionID, GET_ELEMENT_ATTRIBUTE)
+    .Replace(':id', FElementID, [rfIgnoreCase])
+    .Replace(':attributeName', attributeName, [rfIgnoreCase]);
+
+  Result := FDriver.Execute.Get(lUrl);
+end;
+
+/// <summary>
+/// Obtém o valor do atributo ou propriedade especificado para este elemento.
+/// </summary>
+/// <param name="attributeName">O nome do atributo ou propriedade.</param>
+/// <returns>O valor atual do atributo ou propriedade. Retorna <see langword="null"/>
+/// se o valor não estiver definido.</returns>
+/// <remarks>O método <see cref="GetAttribute"/> retornará o valor atual
+/// do atributo ou propriedade, mesmo que o valor tenha sido modificado após o carregamento
+/// da página. Observe que o valor dos seguintes atributos será retornado
+/// mesmo se não houver um atributo explícito no elemento:
+/// <list type="table">
+/// <listheader>
+/// <term>Nome do Atributo</term>
+/// <term>Valor retornado se não especificado explicitamente</term>
+/// <term>Tipos válidos de elementos</term>
+/// </listheader>
+/// <item>
+/// <description>checked</description>
+/// <description>checked</description>
+/// <description>Caixa de seleção (Check Box)</description>
+/// </item>
+/// <item>
+/// <description>selected</description>
+/// <description>selected</description>
+/// <description>Opções em elementos Select</description>
+/// </item>
+/// <item>
+/// <description>disabled</description>
+/// <description>disabled</description>
+/// <description>Entrada e outros elementos de interface do usuário (UI)</description>
+/// </item>
+/// </list>
+/// O método verifica tanto os atributos declarados na marcação HTML da página quanto
+/// as propriedades do elemento ao acessar as propriedades do elemento
+/// via JavaScript.
+/// </remarks>
+function TTSWebDriverElement.GetAttribute(const AAttributeName: string): string;
+var
+  LJSResource: string;
+begin
+  LJSResource :=
+    EscapeJavaScriptString(
+      GetResourceStream('get_attribute_js')
+    );
+
+  Result := FDriver.ExecuteSyncScript(
+    Format('return (%s).apply(null, arguments);', [LJSResource]),
+    '{}',
+    Format('[{"%s": "%s"}, "%s"]', [FElementRef, FElementID, AAttributeName])
+  );
+end;
+
+function TTSWebDriverElement.Displayed: Boolean;
+var
+  LJSResource: string;
+begin
+  LJSResource :=
+    EscapeJavaScriptString(
+      GetResourceStream('is_displayed_js')
+    );
+
+  Result := FDriver.ExecuteSyncScript(
+    Format('return (%s).apply(null, arguments);', [LJSResource]),
+    '{}',
+    Format('[{"%s": "%s"}]', [FElementRef, FElementID])
+  ).Contains('true');
 end;
 
 function TTSWebDriverElement.GetCssValue(const propertyName: string): string;
@@ -107,18 +207,6 @@ begin
     .Replace(':propertyName', propertyName, [rfIgnoreCase]);
 
   Result := FDriver.Execute.Get(lUrl);
-end;
-
-function TTSWebDriverElement.GetDisplayed: Boolean;
-var
-  lResult: string;
-begin
-  Result := True;
-
-  if Self.GetCssValue('display').Contains('none') or
-     Self.GetCssValue('visibility').Contains('hidden')
-  then
-    Result := False;
 end;
 
 function TTSWebDriverElement.GetEnabled: Boolean;
@@ -175,7 +263,7 @@ begin
       end;
 
       FElementRef := lJSONObject.Pairs[0].JsonString.Value;
-      FElementID := lJSONObject.Pairs[0].JsonValue.Value;
+      FElementID  := lJSONObject.Pairs[0].JsonValue.Value;
     finally
       FreeAndNil(lJSONObject);
     end;

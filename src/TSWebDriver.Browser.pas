@@ -2,7 +2,7 @@ unit TSWebDriver.Browser;
 interface
 
 uses
-  System.SysUtils, System.JSON, System.IOUtils, System.StrUtils, System.Classes,
+  System.SysUtils, System.JSON, System.StrUtils, System.Classes,
   Winapi.Windows, TSWebDriver.Request, TSWebDriver.Consts,
   TSWebDriver.Interfaces, TSWebDriver.Utils, TSWebDriver.Element,
   TSWebDriver.IElement, System.Generics.Collections, TSWebDriver.By,
@@ -98,7 +98,9 @@ begin
   Result := EmptyStr;
 
   Result := Execute.Post(MakeURL(FSessionID, EXECUTE_SCRIPT),
-    Format('{"script":"%s","parameters":%s,"args":%s}', [AScript, AParameters, AArgs]));
+    Format('{"script":"%s","parameters":%s,"args":%s}',
+      [AScript, AParameters, AArgs])
+  );
 end;
 
 function TTSWebDriverBrowserBase.Execute: ITSWebDriverRequest;
@@ -232,8 +234,6 @@ begin
 end;
 
 function TTSWebDriverBrowserBase.HandleCustomArgs(): string;
-var
-  lArgument: string;
 begin
   Result := EmptyStr;
 

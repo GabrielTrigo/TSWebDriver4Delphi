@@ -1,0 +1,3 @@
+find_elements_js RCDATA ".\\js\\find-elements.js"
+get_attribute_js RCDATA ".\\js\\get-attribute.js"
+is_displayed_js  RCDATA ".\\js\\is-displayed.js"

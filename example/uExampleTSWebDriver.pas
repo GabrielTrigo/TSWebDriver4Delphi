@@ -5,9 +5,14 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
-  Vcl.StdCtrls, System.JSON, System.IOUtils, Vcl.ToolWin,
-  Vcl.ComCtrls, Vcl.Buttons, TSWebDriver, TSWebDriver.IElement,
-  Vcl.WinXCtrls, TSWebDriver.Interfaces, TSWebDriver.By, TSWebDriver.IBrowser;
+  Vcl.StdCtrls,  System.IOUtils, Vcl.ToolWin,
+  Vcl.ComCtrls, Vcl.Buttons, System.JSON, REST.Json,
+
+  TSWebDriver,
+  TSWebDriver.IElement,
+  TSWebDriver.Interfaces,
+  TSWebDriver.By,
+  TSWebDriver.IBrowser;
 
 type
   TFrmMain = class(TForm)
@@ -58,12 +63,14 @@ begin
   FDriver := TTSWebDriver.New.Driver();
   //FDriver.Options.DriverPath('.\a\b\c\webdriver.exe');
 
-  FChromeDriver := FDriver.Browser().Chrome();
+
   //FChromeDriver
     //.AddArgument('window-size', '1000,800')
     //.AddArgument('user-data-dir', 'E:/Dev/Delphi/TSWebDriver4Delphi/example/cache');
 
   FDriver.Start();
+
+  FChromeDriver := FDriver.Browser().Chrome();
 end;
 
 procedure TFrmMain.Run(AProc: TProc; AUrl: string = ''; ACloseSection: Boolean = True);
@@ -149,11 +156,11 @@ begin
     begin
       LCheckbox := FChromeDriver.FindElement(FBy.XPath('//input[@id=''checky'']'));
 
-      MemLog.Lines.AddPair('LCheckbox', LCheckbox.GetProperty('checked'));
+      MemLog.Lines.Append(LCheckbox.GetAttribute('checked'));
       LCheckbox.Click();
-      MemLog.Lines.AddPair('LCheckbox', LCheckbox.GetProperty('checked'));
+      MemLog.Lines.Append(LCheckbox.GetAttribute('checked'));
     end,
-    'file:///E:/dev/Delphi/TSWebDriver4Delphi/tests/mocks/formPage.html'
+    'file:///' + TPath.GetFullPath('..\..\test\mocks\formPage.html').Replace('\', '/')
   );
 end;
 
@@ -186,6 +193,7 @@ begin
 
   with MemLog.Lines do
   begin
+    AddPair('Displayed', BoolToStr(LElement.Displayed(), True)).Add('');
     AddPair('Property style', LElement.GetProperty('style')).Add('');
     AddPair('Property innerHtml', LElement.GetProperty('innerHtml')).Add('');
     AddPair('CssValue "display"', LElement.GetCssValue('display')).Add('');
@@ -194,7 +202,6 @@ begin
     AddPair('GetText', LElement.GetText()).Add('');
     AddPair('GetTagName', LElement.GetTagName()).Add('');
     AddPair('GetEnabled', BoolToStr(LElement.GetEnabled, True)).Add('');
-    AddPair('GetDisplayed', BoolToStr(LElement.GetDisplayed, True)).Add('');
     AddPair('GetPageSource', FChromeDriver.GetPageSource()).Add('');
   end;
 end;

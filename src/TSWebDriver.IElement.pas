@@ -18,14 +18,14 @@ type
     function GetSelected: Boolean;
     function GetLocation: TPoint;
     function GetSize: TSize;
-    function GetDisplayed: Boolean;
+    function Displayed: Boolean;
     procedure Clear;
     procedure SendKeys(const text: string);
     procedure Submit;
     procedure Click;
-    function GetAttribute(const attributeName: string): string;
+    function GetAttribute(const AAttributeName: string): string;
     function GetProperty(const propertyName: string): string;
-    function GetDomAttribute(const attributeName: string): string;
+    function GetDomAttribute(const AAttributeName: string): string;
     function GetCssValue(const propertyName: string): string;
     procedure LoadFromJson(const AJson: string);
     function IsEmpty(): Boolean;
