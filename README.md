@@ -17,6 +17,11 @@ _WebDriver is a remote control interface that enables introspection and control 
 
 _Provided is a set of interfaces to discover and manipulate DOM elements in web documents and to control the behavior of a user agent. It is primarily intended to allow web authors to write tests that automate a user agent from a separate controlling process, but may also be used in such a way as to allow in-browser scripts to control a — possibly separate — browser._
 
+## Why?
+The conception of this project originated from the need to perform "Web scraping" on a specific website. Although there are numerous options for this task, such as Selenium with Python, Puppeteer in Node.JS, and Playwright in C#, the question arose: what about Delphi?
+I chose not to resort to the renowned CEF4Delphi, seeking a lighter alternative with fewer dependencies. I wanted a solution that efficiently addressed the demands, providing a more agile and uncomplicated experience.
+In this scenario, I developed this tool in Delphi to simplify my work.
+
 <!-- GETTING STARTED -->
 ## Getting Started
 
