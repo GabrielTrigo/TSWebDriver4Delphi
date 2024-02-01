@@ -24,6 +24,13 @@ _Provided is a set of interfaces to discover and manipulate DOM elements in web 
 ⚠️ Attention: The project is still in the alpha stage. Classes and methods may undergo changes during development.
 ```
 
+Clone the repository and ensure that dependencies are up to date
+```git
+git clone git@github.com:GabrielTrigo/TSWebDriver4Delphi.git
+git submodule init
+git submodule update
+```
+
 Visit the official download page of your browser's WebDriver (currently, only for Chrome) and download the driver that corresponds to the version installed on your computer.
 
 To find your Chrome browser version, follow these steps: go to Settings > Help > About Google Chrome. For instance, the version might be something like 121.0.6167.140 (Official Build) 64-bit. Make sure to download the WebDriver that matches this specific version to ensure proper integration with your development environment.
