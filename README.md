@@ -58,7 +58,7 @@ To find your Chrome browser version, follow these steps: go to Settings > Help >
 📌 See the example project (\example\ExampleTSWebDriver) and the test project (\test\TSWebDriver4DelphiTests)
 
 # Demo
-_Scraping fake store_
+_Scraping Mercado Livre site_
 <br/>
 ![demo)](img/Demo_TSWebDriver4Delphi-ezgif.com-video-to-gif-converter.gif)
 
