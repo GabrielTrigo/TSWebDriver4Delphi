@@ -9,7 +9,7 @@
 # TSWebDriver4Delphi
 This library was inspired by [Selenium](https://github.com/SeleniumHQ/selenium) and [Puppeteer](https://pptr.dev)
 
-TSWebDriver4Delphi is a comprehensive project that encapsulates a variety of tools that enable web browser automation. Specifically provides an infrastructure for the W3C WebDriver specification - a platform and language-neutral coding interface compatible with the Chrome browser (for now, only Chrome).
+TSWebDriver4Delphi is a project that encapsulates a variety of tools enabling web browser automation (for now, only Chrome). It specifically provides an infrastructure for the W3C WebDriver specification. With an approach similar to Selenium, TSWebDriver4Delphi allows the automation of interactions with user interface elements, making tests more efficient and reliable.
 
 
 # What is WebDriver? 
