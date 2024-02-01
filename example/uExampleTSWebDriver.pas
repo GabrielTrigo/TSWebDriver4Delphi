@@ -63,14 +63,12 @@ begin
   FDriver := TTSWebDriver.New.Driver();
   //FDriver.Options.DriverPath('.\a\b\c\webdriver.exe');
 
-
+  FChromeDriver := FDriver.Browser().Chrome();
   //FChromeDriver
     //.AddArgument('window-size', '1000,800')
     //.AddArgument('user-data-dir', 'E:/Dev/Delphi/TSWebDriver4Delphi/example/cache');
 
   FDriver.Start();
-
-  FChromeDriver := FDriver.Browser().Chrome();
 end;
 
 procedure TFrmMain.Run(AProc: TProc; AUrl: string = ''; ACloseSection: Boolean = True);
