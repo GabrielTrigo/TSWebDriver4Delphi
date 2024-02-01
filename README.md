@@ -17,6 +17,30 @@ _WebDriver is a remote control interface that enables introspection and control 
 
 _Provided is a set of interfaces to discover and manipulate DOM elements in web documents and to control the behavior of a user agent. It is primarily intended to allow web authors to write tests that automate a user agent from a separate controlling process, but may also be used in such a way as to allow in-browser scripts to control a — possibly separate — browser._
 
+<!-- GETTING STARTED -->
+## Getting Started
+
+```
+⚠️ Attention: The project is still in the alpha stage. Classes and methods may undergo changes during development.
+```
+
+Visit the official download page of your browser's WebDriver (currently, only for Chrome) and download the driver that corresponds to the version installed on your computer.
+
+To find your Chrome browser version, follow these steps: go to Settings > Help > About Google Chrome. For instance, the version might be something like 121.0.6167.140 (Official Build) 64-bit. Make sure to download the WebDriver that matches this specific version to ensure proper integration with your development environment.
+
+[Chrome WebDriver Downloads](https://chromedriver.chromium.org/downloads)
+
+### Usage
+
+  ```delphi
+  var
+    FDriver: ITSWebDriverBase;
+  begin
+    FDriver := TTSWebDriver.New.Driver();
+    FDriver.Options.DriverPath('your-path\webdriver.exe');
+  end;
+  ```
+📌 See the example project (\example\ExampleTSWebDriver) and the test project (\test\TSWebDriver4DelphiTests)
 
 # Demo
 _Scraping fake store_
