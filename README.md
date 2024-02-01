@@ -35,9 +35,12 @@ To find your Chrome browser version, follow these steps: go to Settings > Help >
   ```delphi
   var
     FDriver: ITSWebDriverBase;
+    FChromeDriver: ITSWebDriverBrowser;
   begin
     FDriver := TTSWebDriver.New.Driver();
     FDriver.Options.DriverPath('your-path\webdriver.exe');
+
+    FChromeDriver := FDriver.Browser().Chrome();
   end;
   ```
 📌 See the example project (\example\ExampleTSWebDriver) and the test project (\test\TSWebDriver4DelphiTests)
