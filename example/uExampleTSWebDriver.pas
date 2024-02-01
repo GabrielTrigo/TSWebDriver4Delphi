@@ -116,7 +116,7 @@ procedure TFrmMain.btnExample4Click(Sender: TObject);
 begin
   Self.Run(
     ExampleChromeSearch,
-    'https://developer.chrome.com'
+    'https://www.mercadolivre.com.br'
   );
 end;
 
@@ -165,16 +165,31 @@ end;
 procedure TFrmMain.ExampleChromeSearch;
 var
   LElement: ITSWebDriverElement;
+  LElements: TTSWebDriverElementList;
 begin
-  LElement := FChromeDriver.FindElement(FBy.ClassName('search-box__input'));
+  try
+    LElement := FChromeDriver.FindElement(FBy.Name('as_word'));
 
-  LElement.SendKeys('automate');
+    LElement.SendKeys('Macbook');
+    // Send Enter key code > https://www.w3.org/TR/webdriver2/#element-send-keys
+    LElement.SendKeys('\uE007');
 
-  FChromeDriver.WaitForSelector('.search-box__link');
+    FChromeDriver.WaitForPageReady();
 
-  LElement := FChromeDriver.FindElement(FBy.ClassName('search-box__link'));
+    LElements := FChromeDriver.FindElements(FBy.ClassName('ui-search-layout__item'));
 
-  LElement.Click();
+    MemLog.Lines.Append('I finded ' + LElements.Count.ToString() + ' items');
+
+    for LElement in LElements do
+      with MemLog.Lines do
+      begin
+        AddPair('Name',  LElement.FindElement(FBy.TagName('h2')).GetText());
+        AddPair('Price', LElement.FindElement(FBy.ClassName('ui-search-price__second-line')).GetText());
+        Append('-------------------------');
+      end;
+  finally
+    FreeAndNil(LElements);
+  end;
 end;
 
 procedure TFrmMain.ExampleDynamicElement;

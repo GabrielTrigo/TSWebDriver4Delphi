@@ -54,11 +54,11 @@ object FrmMain: TFrmMain
     OnClick = btnExecuteScriptClick
   end
   object btnExample4: TButton
-    Left = 215
+    Left = 296
     Top = 41
-    Width = 75
+    Width = 89
     Height = 25
-    Caption = 'Example 4'
+    Caption = 'Mercado Livre'
     TabOrder = 3
     OnClick = btnExample4Click
   end
@@ -99,7 +99,7 @@ object FrmMain: TFrmMain
     OnClick = btnExample3Click
   end
   object Button1: TButton
-    Left = 296
+    Left = 215
     Top = 41
     Width = 75
     Height = 25
