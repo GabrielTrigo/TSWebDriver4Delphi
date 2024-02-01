@@ -60,7 +60,7 @@ To find your Chrome browser version, follow these steps: go to Settings > Help >
 # Demo
 _Scraping fake store_
 <br/>
-![ezgif com-video-to-gif (2)](img/demo.gif)
+![demo)](img/Demo_TSWebDriver4Delphi-ezgif.com-video-to-gif-converter.gif)
 
 
 # Example
