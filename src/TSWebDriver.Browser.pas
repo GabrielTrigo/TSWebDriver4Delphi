@@ -73,7 +73,7 @@ begin
   AValue := AValue.Trim().ToLower();
 
   if not AValue.IsEmpty then
-    FDriverArguments.Add(AnsiQuotedStr(Format('--%s:%s', [AKey, AValue]), '"'))
+    FDriverArguments.Add(AnsiQuotedStr(Format('--%s=%s', [AKey, AValue]), '"'))
   else
     FDriverArguments.Add(AnsiQuotedStr(Format('--%s', [AKey]), '"'));
 
