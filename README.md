@@ -55,12 +55,12 @@ To find your Chrome browser version, follow these steps: go to Settings > Help >
     FChromeDriver := FDriver.Browser().Chrome();
   end;
   ```
-📌 See the example project (\example\ExampleTSWebDriver) and the test project (\test\TSWebDriver4DelphiTests)
+📌 See the example project (`\example\ExampleTSWebDriver`) and the test project (`\test\TSWebDriver4DelphiTests`)
 
 # Demo
-_Scraping fake store_
+_Scraping Mercado Livre site_
 <br/>
-![ezgif com-video-to-gif (2)](img/demo.gif)
+![demo)](img/Demo_TSWebDriver4Delphi-ezgif.com-video-to-gif-converter.gif)
 
 
 # Example
